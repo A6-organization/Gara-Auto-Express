@@ -1,14 +1,14 @@
-import express from 'express';
-import { Request, Response } from 'express';
-
+import cors from 'cors';
+import ExpressApplication from './app';
+import routes from './routers';
 import env from './config/env';
-const app = express();
-const port = env.port;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+const middleWares = [cors()];
+
+const app = new ExpressApplication({
+  port: parseInt(env.port) || 8080,
+  middleWares,
+  routes,
 });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+app.listen();
