@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
-import { compare } from 'bcrypt';
 import { logger } from '../../../common/helpers/logger';
 import InternalServerError from '../../../common/errors/types/InternalServerError';
 import UserRepo from '../../../common/repositories/UserRepo';
-
-class AuthController {
+import TokenServices from '../services/tokenServices';
+import messages from '../../../common/messages';
+import { SignInBody, SignUpBody } from '../types/auth';
+import BadRequestError from '../../../common/errors/types/BadRequestError';
+import UnauthorizedError from '../../../common/errors/types/UnaithorizedError';
+class AuthController extends TokenServices {
   apiCheck = async (_req: Request, res: Response) => {
     try {
       const result = await UserRepo.findAllUser();
@@ -12,6 +15,76 @@ class AuthController {
     } catch (error) {
       logger.error(error);
       throw new InternalServerError();
+    }
+  };
+
+  signUpAccount = async (
+    req: Request<unknown, unknown, SignUpBody>,
+    res: Response
+  ) => {
+    const { email, password, roles } = req.body;
+    try {
+      await this.signUpAccountService(email, password, roles);
+      res.send('Account has been created');
+    } catch (error) {
+      logger.error(error);
+      if (error.message) {
+        throw new BadRequestError(error.message);
+      }
+      throw new InternalServerError(messages.somethingWentWrongMessage);
+    }
+  };
+
+  generateAdminAccount = async (req: Request, res: Response) => {
+    try {
+      console.log(req.body);
+      res.send(`Welcome to GARA-AUTO ADMIN: `);
+    } catch (error) {
+      logger.error(error);
+      throw new InternalServerError(messages.somethingWentWrongMessage);
+    }
+  };
+
+  login = async (req: Request<unknown, unknown, SignInBody>, res: Response) => {
+    try {
+      const { email, password } = req.body;
+      const { accessToken, refreshToken } = await this.loginService(
+        email,
+        password
+      );
+      res.json({
+        statusCode: 200,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: {
+          authorization: `Bearer ${refreshToken}`,
+        },
+      });
+    } catch (error) {
+      logger.error(error);
+      if (error.message) {
+        throw new BadRequestError(error.message);
+      }
+      throw new InternalServerError(messages.somethingWentWrongMessage);
+    }
+  };
+
+  regenarateAccessToken = async (req: Request, res: Response) => {
+    try {
+      const user = req.user;
+      const token = req.headers.authorization.split(' ')[1];
+      const result = await this.regenarateAccessTokenService(token, user);
+      res.json({
+        statusCode: 200,
+        headers: { authorization: `Bearer ${result}` },
+      });
+    } catch (error) {
+      logger.error(error);
+      if (error.message) {
+        throw new UnauthorizedError(error.message);
+      }
+      throw new InternalServerError(error.message);
     }
   };
 }

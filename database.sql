@@ -14,9 +14,11 @@ CREATE TABLE login_tokens (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     token CHAR(255),
     user_id INT UNSIGNED NOT NULL,
+    created_at datetime NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+-- password ducquang123
 INSERT INTO users VALUE (
         DEFAULT,
         "$2a$12$QE5VKmeBHfqXTebeK8Vjc.MAMKdfc.UjmFr1b9EcaE6956Nop2eli",

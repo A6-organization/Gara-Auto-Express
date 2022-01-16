@@ -2,7 +2,7 @@
  * This helper ensures consistent system logging
  * It includes formatting the log message when displayed on the command line
  */
-import winston, { format } from 'winston';
+import winston from 'winston';
 import dayjs from 'dayjs';
 import expressWinston from 'express-winston';
 import { Handler } from 'express';

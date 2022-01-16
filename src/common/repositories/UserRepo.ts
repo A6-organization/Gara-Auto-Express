@@ -1,10 +1,17 @@
-import { Op, Sequelize } from 'sequelize';
 import UserModel from '../models/UserModel';
-import dayjs from 'dayjs';
 
 class UserRepository {
   async findAllUser() {
     return await UserModel.findAll({
+      raw: true,
+    });
+  }
+
+  async findUserByEmail(email: string) {
+    return await UserModel.findOne({
+      where: {
+        email,
+      },
       raw: true,
     });
   }

@@ -22,4 +22,18 @@ export default {
     // logging: process.env.NODE_ENV === Environment.Local,
     port: parseInt(process.env.DB_PORT) || 3306,
   },
+
+  //jwt
+  jwtSecret: process.env.ENV_SECRET,
+  jwtExpiredAccessTokenTime: process.env.EXPIRED_ACCESS_TOKEN,
+  jwtExpiredRefreshTokenTime: process.env.EXPIRED_REFRESH_TOKEN,
+
+  //sendgrid
+  sendGridEmail: process.env.SENDGRID_EMAIL,
+  sendGridPassword: process.env.SENDGRID_PASSWORD,
+  sendGridApiKey: process.env.SENDGRID_API_KEY,
+  sendGridSignUpTemplateId: process.env.SENDGRID_SIGNUP_TEMPLATE_ID,
+  sendGridFromEmail: process.env.SENDGRID_FROM_EMAIL,
+  sendGridFromEmailName: process.env.SENDGRID_FROM_EMAIL_NAME,
+  sendGridApiUrl: process.env.SENDGRID_API_URL,
 };
