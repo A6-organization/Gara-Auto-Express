@@ -1,3 +1,4 @@
+import LoginAttempsModel from '../models/LoginAttempsModel';
 import UserModel from '../models/UserModel';
 
 class UserRepository {
@@ -13,6 +14,20 @@ class UserRepository {
         email,
       },
       raw: true,
+    });
+  }
+
+  async findUserDetailsByEmail(email: string) {
+    return await UserModel.findOne({
+      where: {
+        email,
+      },
+      include: [
+        {
+          model: LoginAttempsModel,
+          as: 'attemps',
+        },
+      ],
     });
   }
 }

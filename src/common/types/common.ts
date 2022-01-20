@@ -30,3 +30,23 @@ export interface LoginTokenCreation extends Omit<LoginTokenAttributes, 'id'> {
   user_id: number;
   created_at: Date;
 }
+
+export interface LoginAttempsAttributes {
+  id: number;
+  user_id: number;
+  attemps: number;
+  start_time: Date;
+  end_time: Date;
+}
+
+export interface LoginAttempsCreation
+  extends Omit<LoginAttempsAttributes, 'id'> {
+  user_id: number;
+  attemps: number;
+  start_time: Date;
+  end_time: Date;
+}
+
+export enum TimeZone {
+  ASIA_HCM = 'Asia/Ho_Chi_Minh',
+}

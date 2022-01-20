@@ -13,6 +13,8 @@ import UserModel from '../../../common/models/UserModel';
 import sendGridMail from '../../../common/axios/sendGridMail';
 import { UsersAttributes } from '../../../common/types/common';
 import dayjs from 'dayjs';
+import LoginAttempsRepo from '../../../common/repositories/LoginAttempsRepo';
+import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
 
 class TokenServices {
   protected generateToken = async (email: string, type: TokenType) => {
@@ -76,10 +78,10 @@ class TokenServices {
         return newToken.token;
       } else {
         let token = '';
-        const createdTime = dayjs(new Date()).add(7, 'd');
+        const afterCreated7Days = dayjs(tokenExist.created_at).add(7, 'd');
         const currentTime = dayjs(new Date());
 
-        if (currentTime.diff(createdTime) > 0) {
+        if (currentTime.diff(afterCreated7Days) > 0) {
           const genToken = await this.generateToken(
             user.email,
             TokenType.REFRESH
@@ -141,7 +143,10 @@ class TokenServices {
   }
 
   protected loginService = async (email: string, password: string) => {
-    const user = await UserRepo.findUserByEmail(email);
+    const [user, userWithAttemps] = await Promise.all([
+      UserRepo.findUserByEmail(email),
+      UserRepo.findUserDetailsByEmail(email),
+    ]);
 
     if (user === null) {
       throw new Error(messages.authMessage.EmailNotExist);
@@ -156,8 +161,46 @@ class TokenServices {
         break;
     }
 
+    if (userWithAttemps['attemps'] === null) {
+      await LoginAttempsRepo.createNewRecord(user.id);
+
+      logger.info(`Create new Login Attemps for user with id: ${user.id}`);
+    } else {
+      const end_time = userWithAttemps['attemps']['end_time'];
+      const crrDate = new Date();
+
+      if (compareDate1GreaterDate2(crrDate, end_time) === true) {
+        await LoginAttempsRepo.updateRecord(
+          user.id,
+          7,
+          crrDate,
+          dayjs(crrDate).add(2, 'h').toDate()
+        );
+
+        logger.info(`Update new Login Attemps for user with id: ${user.id}`);
+      }
+    }
+
+    const la = await LoginAttempsRepo.getRecordByUserID(user.id);
+
     const correctPassword = await compareSaltPassword(password, user.password);
     if (!correctPassword) {
+      if (la.attemps === 0) {
+        await UserModel.update(
+          {
+            status: UserStatus.SUSPEND,
+          },
+          {
+            where: {
+              id: user.id,
+            },
+          }
+        );
+      } else {
+        la.attemps = la.attemps - 1;
+        await la.save();
+      }
+
       throw new Error(messages.authMessage.PasswordNotMatch);
     }
     const accessToken = await this.generateToken(user.email, TokenType.ACCESS);

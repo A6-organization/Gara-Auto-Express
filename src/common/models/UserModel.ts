@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../config/sequelize';
 import { UserRoles, UserStatus } from '../../modules/auth/types/auth';
 import { UsersAttributes, UsersCreation } from '../types/common';
+import LoginAttempsModel from './LoginAttempsModel';
 
 class UserModel extends Model<UsersAttributes | UsersCreation> {
   id: number;
@@ -53,5 +54,10 @@ UserModel.init(
     sequelize,
   }
 );
+
+UserModel.hasOne(LoginAttempsModel, {
+  as: 'attemps',
+  foreignKey: 'user_id',
+});
 
 export default UserModel;
