@@ -4,7 +4,7 @@ import messages from '../common/messages';
 
 export default async (req: Request, _res: Response, next: NextFunction) => {
   const value = req.body;
-  if (Object.keys(value).length === 0 && value.constructor === Object) {
+  if (Object.keys(value).length === 0 && value instanceof Object) {
     return next(
       new BadRequestError(messages.generalMessage.RequestBodyMissing)
     );
