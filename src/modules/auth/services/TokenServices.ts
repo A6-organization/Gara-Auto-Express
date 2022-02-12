@@ -15,6 +15,7 @@ import { UsersAttributes } from '../../../common/types/common';
 import dayjs from 'dayjs';
 import LoginAttempsRepo from '../../../common/repositories/LoginAttempsRepo';
 import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
+import GoogleRecaptchaService from '../../../common/services/GoogleRecaptchaService';
 
 class TokenServices {
   protected generateToken = async (email: string, type: TokenType) => {
@@ -24,16 +25,12 @@ class TokenServices {
       // REFRESH token in other hand use HS512
       let token = '';
       if (type === 'Access') {
-        token = await sign(
-          { user: email, type: TokenType.ACCESS },
-          env.jwtSecret,
-          {
-            //HS256 - HMAC using SHA-256 hash algorithm
-            expiresIn: env.jwtExpiredAccessTokenTime,
-          }
-        );
+        token = sign({ user: email, type: TokenType.ACCESS }, env.jwtSecret, {
+          //HS256 - HMAC using SHA-256 hash algorithm
+          expiresIn: env.jwtExpiredAccessTokenTime,
+        });
       } else {
-        token = await sign(
+        token = sign(
           {
             user: email,
             type: TokenType.REFRESH,
@@ -110,7 +107,9 @@ class TokenServices {
   protected async signUpAccountService(
     email: string,
     password: string,
-    roles: string
+    roles: string,
+    gCaptcha: string,
+    userIP: string
   ) {
     const arrOfRoles = ['CLIENT', 'EXPERT', 'SALE'];
 
@@ -119,6 +118,16 @@ class TokenServices {
       if (!arrOfRoles.includes(roles.toUpperCase())) {
         throw new Error(messages.userMessage.RoleDoesntExist);
       }
+      roles = roles.toUpperCase();
+    }
+
+    const gCaptchaResponse = await GoogleRecaptchaService.verifyRecaptcha(
+      userIP,
+      gCaptcha
+    );
+
+    if (gCaptchaResponse !== 'valid') {
+      throw new Error(gCaptchaResponse);
     }
 
     const userExist = await UserRepo.findUserByEmail(email);

@@ -32,7 +32,7 @@ class LoginAttempsRepo {
   }
 
   async getRecordByUserID(user_id: number) {
-    return await LoginAttempsModel.findOne({
+    return LoginAttempsModel.findOne({
       where: {
         user_id,
       },

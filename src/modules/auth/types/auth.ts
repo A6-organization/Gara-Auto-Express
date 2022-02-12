@@ -16,6 +16,7 @@ export enum UserRoles {
 export interface SignUpBody {
   email: string;
   password: string;
+  gCaptcha: string;
   roles?: string;
 }
 

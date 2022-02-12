@@ -3,13 +3,13 @@ import UserModel from '../models/UserModel';
 
 class UserRepository {
   async findAllUser() {
-    return await UserModel.findAll({
+    return UserModel.findAll({
       raw: true,
     });
   }
 
   async findUserByEmail(email: string) {
-    return await UserModel.findOne({
+    return UserModel.findOne({
       where: {
         email,
       },
@@ -18,7 +18,7 @@ class UserRepository {
   }
 
   async findUserDetailsByEmail(email: string) {
-    return await UserModel.findOne({
+    return UserModel.findOne({
       where: {
         email,
       },

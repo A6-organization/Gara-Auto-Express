@@ -24,6 +24,8 @@ export default {
     PasswordNotMatch: `Password doesn't match. Please try again`,
     EmailNotExist: 'This email doesn`t exist. Sign up new account instead!',
     TokenExpired: 'Your login session has expired please log in again',
+    IpAddressBeenBlock:
+      'Your IP have been blocked for this site. Please contact to year network provider for more details',
   },
 
   somethingWentWrongMessage: 'Something went wrong please try again later!',

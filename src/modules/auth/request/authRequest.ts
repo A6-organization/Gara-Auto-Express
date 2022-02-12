@@ -11,6 +11,7 @@ export default {
     body: Joi.object({
       email: Joi.string().required(),
       password: Joi.string().required(),
+      gCaptcha: Joi.string().required(),
       roles: Joi.string().optional(),
     }),
   },

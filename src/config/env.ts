@@ -28,7 +28,7 @@ export default {
   jwtExpiredAccessTokenTime: process.env.EXPIRED_ACCESS_TOKEN,
   jwtExpiredRefreshTokenTime: process.env.EXPIRED_REFRESH_TOKEN,
 
-  //sendgrid
+  //send grid mail
   sendGridEmail: process.env.SENDGRID_EMAIL,
   sendGridPassword: process.env.SENDGRID_PASSWORD,
   sendGridApiKey: process.env.SENDGRID_API_KEY,
@@ -36,4 +36,9 @@ export default {
   sendGridFromEmail: process.env.SENDGRID_FROM_EMAIL,
   sendGridFromEmailName: process.env.SENDGRID_FROM_EMAIL_NAME,
   sendGridApiUrl: process.env.SENDGRID_API_URL,
+
+  //gRecaptcha
+  googleRecaptchaSecret: process.env.GOOGLE_CAPTCHA_BACKEND,
+  googleRecaptchaDecodeURL: process.env.GOOGLE_CAPTCHA_DECODE_URL,
+  googleRecaptchaSample: process.env.GOOGLE_CAPTCHA_SAMPLE,
 };

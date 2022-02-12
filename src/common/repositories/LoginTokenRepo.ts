@@ -5,7 +5,7 @@ class LoginTokenRepository {
     token: string,
     user_id: number
   ): Promise<LoginTokenModel> {
-    return await LoginTokenModel.create({
+    return LoginTokenModel.create({
       token,
       user_id,
       created_at: new Date(),
@@ -13,7 +13,7 @@ class LoginTokenRepository {
   }
 
   async getRefreshTokenById(id: number) {
-    return await LoginTokenModel.findOne({
+    return LoginTokenModel.findOne({
       where: {
         id,
       },
@@ -22,7 +22,7 @@ class LoginTokenRepository {
   }
 
   async getRefreshTokenByUserId(user_id: number) {
-    return await LoginTokenModel.findOne({
+    return LoginTokenModel.findOne({
       where: {
         user_id,
       },

@@ -7,6 +7,7 @@ import messages from '../../../common/messages';
 import { SignInBody, SignUpBody } from '../types/auth';
 import BadRequestError from '../../../common/errors/types/BadRequestError';
 import UnauthorizedError from '../../../common/errors/types/UnaithorizedError';
+import { BLOCK_IPS } from '../../../common/constants';
 class AuthController extends TokenServices {
   apiCheck = async (_req: Request, res: Response) => {
     try {
@@ -22,9 +23,13 @@ class AuthController extends TokenServices {
     req: Request<unknown, unknown, SignUpBody>,
     res: Response
   ) => {
-    const { email, password, roles } = req.body;
+    const userIP = req.socket.remoteAddress;
+    const { email, password, roles, gCaptcha } = req.body;
     try {
-      await this.signUpAccountService(email, password, roles);
+      if (BLOCK_IPS.includes(userIP)) {
+        throw new Error(messages.authMessage.IpAddressBeenBlock);
+      }
+      await this.signUpAccountService(email, password, roles, gCaptcha, userIP);
       res.send('Account has been created');
     } catch (error) {
       logger.error(error);
