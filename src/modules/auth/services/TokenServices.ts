@@ -225,7 +225,6 @@ class TokenServices {
     const loginTokenRecord = await LoginTokenRepo.getRefreshTokenByUserId(
       user.id
     );
-
     if (token !== loginTokenRecord.token) {
       throw new Error(messages.authMessage.TokenExpired);
     }
@@ -233,7 +232,7 @@ class TokenServices {
     const today = dayjs(new Date());
     const dbDate = dayjs(loginTokenRecord.created_at);
 
-    if (today.diff(dbDate) > 0) {
+    if (today.diff(dbDate, 'd') > 7) {
       throw new Error(messages.authMessage.TokenExpired);
     }
 

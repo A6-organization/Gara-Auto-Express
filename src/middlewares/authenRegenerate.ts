@@ -14,7 +14,7 @@ export default async (
     const type = json['type'] as string;
     const email = json['user'] as string;
 
-    if (type === TokenType.REFRESH) {
+    if (type && type === TokenType.REFRESH) {
       if (email) {
         const user = await UserRepo.findUserByEmail(email);
         if (user) {
