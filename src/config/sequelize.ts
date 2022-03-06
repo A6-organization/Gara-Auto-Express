@@ -2,15 +2,24 @@ import { Sequelize, Dialect } from 'sequelize';
 import env from '../config/env';
 
 const { database } = env;
+const {
+  database: databaseName,
+  dialect,
+  username,
+  password,
+  port,
+  resource,
+} = database;
 
 export default new Sequelize(
-  database.database,
-  database.username,
-  database.password,
+  `${dialect}://${username}:${password}@${resource}.database.windows.net:${port}`,
   {
-    dialect: database.dialect as Dialect,
-    host: database.host,
-    port: database.port,
-    retry: { max: 3 },
+    dialect: dialect as Dialect,
+    database: databaseName,
+    username,
+    password,
+    retry: {
+      max: 3,
+    },
   }
-) as Sequelize;
+);

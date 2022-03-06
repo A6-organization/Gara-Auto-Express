@@ -4,7 +4,7 @@ CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     password VARCHAR(100) NOT NULL,
     roles VARCHAR(20) NOT NULL,
-    status VARCHAR(20) DEFAULT "INITIAL",
+    status VARCHAR(20) DEFAULT 'INITIAL',
     email VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL,
     recent_login_time DATETIME,

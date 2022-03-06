@@ -12,7 +12,7 @@ class LoginTokenModel extends Model<LoginTokenAttributes | LoginTokenCreation> {
 LoginTokenModel.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
@@ -21,7 +21,7 @@ LoginTokenModel.init(
       type: DataTypes.STRING(255),
     },
     user_id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     created_at: {
