@@ -35,4 +35,6 @@ router.post(
   wrapper(AuthController.regenarateAccessToken)
 );
 
+router.get('');
+
 export default router;
