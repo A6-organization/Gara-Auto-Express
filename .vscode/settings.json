@@ -1,4 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "files.trimTrailingWhitespace": true
+  "files.trimTrailingWhitespace": true,
+  "appService.defaultWebAppToDeploy": "/subscriptions/b6d38640-637f-4cb0-b8ba-d3062bc1c434/resourceGroups/Gara-auto/providers/Microsoft.Web/sites/gara-auto-production-backend",
+  "appService.deploySubpath": "."
 }

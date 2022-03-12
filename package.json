@@ -12,7 +12,7 @@
     "lint:fix": "eslint --max-warnings 0 --fix src",
     "prettier": "prettier --check src",
     "prettier:fix": "prettier --write src",
-    "prepare": "husky install"
+    "prepare-develop": "husky install"
   },
   "author": "",
   "license": "ISC",
@@ -32,7 +32,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@google-cloud/storage": "^5.17.0",
+    "@google-cloud/storage": "^5.18.0",
     "@google-cloud/trace-agent": "^5.1.6",
     "@sendgrid/mail": "^7.6.0",
     "axios": "^0.25.0",
