@@ -1,12 +1,15 @@
 import cors from 'cors';
 import ExpressApplication from './app';
 import routes from './routers';
-import env from './config/env';
+import env, { Environment } from './config/env';
 
 const middleWares = [cors()];
 
 const app = new ExpressApplication({
-  port: parseInt(env.port) || 8080,
+  port:
+    env.environment === Environment.Production
+      ? parseInt(env.port)
+      : parseInt(env.portLocal) || 8080,
   middleWares,
   routes,
 });

@@ -11,6 +11,8 @@ dotenv.config({
 });
 
 export default {
+  portLocal: process.env.PORT_LOCAL,
+  environment: process.env.NODE_ENV,
   port: process.env.PORT,
 
   database: {
@@ -19,7 +21,7 @@ export default {
     database: process.env.DB_NAME || 'database',
     resource: process.env.DB_RESOURCE || 'resource',
     dialect: 'mssql',
-    // logging: process.env.NODE_ENV === Environment.Local,
+    logging: process.env.NODE_ENV === Environment.Local,
     port: parseInt(process.env.DB_PORT) || 1433,
   },
 

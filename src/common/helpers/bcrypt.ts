@@ -1,4 +1,4 @@
-import { compare, hash, genSalt } from 'bcrypt';
+import { compare, hash, genSalt } from 'bcryptjs';
 
 export const generateSaltPassword = async (password: string) => {
   try {
