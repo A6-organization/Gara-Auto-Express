@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { logger } from '../../../common/helpers/logger';
 import InternalServerError from '../../../common/errors/types/InternalServerError';
 import UserRepo from '../../../common/repositories/UserRepo';
-import TokenServices from '../services/tokenServices';
+import TokenServices from '../services/TokenServices';
 import messages from '../../../common/messages';
 import { SignInBody, SignUpBody } from '../types/auth';
 import BadRequestError from '../../../common/errors/types/BadRequestError';
