@@ -3,6 +3,9 @@ import env from '../config/env';
 
 const { database } = env;
 console.log('database: ', database);
+
+console.log('its ok');
+
 const {
   database: databaseName,
   dialect,
