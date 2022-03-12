@@ -12,7 +12,8 @@
     "lint:fix": "eslint --max-warnings 0 --fix src",
     "prettier": "prettier --check src",
     "prettier:fix": "prettier --write src",
-    "prepare-develop": "husky install"
+    "prepare-develop": "husky install",
+    "v": "node -v"
   },
   "author": "",
   "license": "ISC",
