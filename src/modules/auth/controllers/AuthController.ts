@@ -92,6 +92,15 @@ class AuthController extends TokenServices {
       throw new InternalServerError(error.message);
     }
   };
+
+  testIntercom = async (req: Request, res: Response) => {
+    try {
+      console.log('testIntercom body', req.body);
+      res.send('yeah its oke');
+    } catch (error) {
+      throw new InternalServerError();
+    }
+  };
 }
 
 export default new AuthController();

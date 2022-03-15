@@ -35,4 +35,6 @@ router.post(
   wrapper(AuthController.regenarateAccessToken)
 );
 
+router.post('/intercom-test', wrapper(AuthController.testIntercom));
+
 export default router;
