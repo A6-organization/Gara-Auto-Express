@@ -1,3 +1,4 @@
+import { UserStatus } from './../../modules/auth/types/auth';
 import LoginAttempsModel from '../models/LoginAttempsModel';
 import UserModel from '../models/UserModel';
 
@@ -28,6 +29,19 @@ class UserRepository {
           as: 'attemps',
         },
       ],
+    });
+  }
+
+  async getAllUser() {
+    return UserModel.findAll({});
+  }
+
+  async getUserWithStatus(status: UserStatus, attributes?: string[]) {
+    return UserModel.findAll({
+      attributes: attributes || ['id', 'roles', 'status', 'email'],
+      where: {
+        status,
+      },
     });
   }
 }

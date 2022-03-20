@@ -20,16 +20,12 @@ export default async (
         if (user) {
           req.user = user;
           return next();
-        } else {
-          return next(new UnauthorizedError());
         }
-      } else {
         return next(new UnauthorizedError());
       }
-    } else {
       return next(new UnauthorizedError());
     }
-  } else {
     return next(new UnauthorizedError());
   }
+  return next(new UnauthorizedError());
 };

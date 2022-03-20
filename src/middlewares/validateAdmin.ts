@@ -6,7 +6,6 @@ export default (req: Request, _res: Response, next: NextFunction) => {
   const { email } = req.user;
   if (email === UserRoles.ADMIN) {
     return next();
-  } else {
-    return next(new UnauthorizedError());
   }
+  return next(new UnauthorizedError());
 };

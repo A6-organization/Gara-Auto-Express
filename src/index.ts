@@ -1,4 +1,5 @@
 import cors from 'cors';
+import './modules/cronEngine/cron';
 import ExpressApplication from './app';
 import routes from './routers';
 import env, { Environment } from './config/env';

@@ -20,8 +20,8 @@ import GoogleRecaptchaService from '../../../common/services/GoogleRecaptchaServ
 class TokenServices {
   protected generateToken = async (email: string, type: TokenType) => {
     try {
-      // we want to generate difference algorhythm with difference type of token
-      // to increate our protection. In our case ACCESS token use HS256 algorithm
+      // we want to generate difference algorithm with difference type of token
+      // to increase our protection. In our case ACCESS token use HS256 algorithm
       // REFRESH token in other hand use HS512
       let token = '';
       if (type === 'Access') {
@@ -46,7 +46,7 @@ class TokenServices {
       }
       return token;
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at generateToken()' });
       throw new Error(messages.authMessage.NotGenerateToken);
     }
   };
@@ -56,7 +56,7 @@ class TokenServices {
       const result = await LoginTokenRepo.generateRefreshToken(token, user_id);
       return result;
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at saveRefreshToken()' });
       throw new Error(messages.authMessage.NotSaveToken);
     }
   };
@@ -73,33 +73,33 @@ class TokenServices {
 
         logger.info(`Generated Refresh Token for user: ${user.email}`);
         return newToken.token;
-      } else {
-        let token = '';
-        const afterCreated7Days = dayjs(tokenExist.created_at).add(7, 'd');
-        const currentTime = dayjs(new Date());
-
-        if (currentTime.diff(afterCreated7Days) > 0) {
-          const genToken = await this.generateToken(
-            user.email,
-            TokenType.REFRESH
-          );
-          await LoginTokenRepo.updateTokenAndDateById(
-            genToken,
-            new Date(),
-            tokenExist.id
-          );
-
-          logger.info(`Updated Refresh Token for user: ${user.email}`);
-
-          token = genToken;
-        } else {
-          token = tokenExist.token;
-        }
-
-        return token;
       }
+
+      let token = '';
+      const afterCreated7Days = dayjs(tokenExist.created_at).add(7, 'd');
+      const currentTime = dayjs(new Date());
+
+      if (currentTime.diff(afterCreated7Days) > 0) {
+        const genToken = await this.generateToken(
+          user.email,
+          TokenType.REFRESH
+        );
+        await LoginTokenRepo.updateTokenAndDateById(
+          genToken,
+          new Date(),
+          tokenExist.id
+        );
+
+        logger.info(`Updated Refresh Token for user: ${user.email}`);
+
+        token = genToken;
+      } else {
+        token = tokenExist.token;
+      }
+
+      return token;
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at handleRefreshToken()' });
       throw new Error(`EXCEPTION handleTokenRefreshToken(): ${error}`);
     }
   };
@@ -197,7 +197,7 @@ class TokenServices {
       if (la.attemps === 0) {
         await UserModel.update(
           {
-            status: UserStatus.SUSPEND,
+            status: UserStatus.ONHOLD,
           },
           {
             where: {

@@ -58,7 +58,6 @@ export default async (req: Request, _res: Response, next: NextFunction) => {
     } catch (error) {
       return next(new UnauthorizedError(`${type} Token Expired`));
     }
-  } else {
-    return next(new UnauthorizedError());
   }
+  return next(new UnauthorizedError());
 };

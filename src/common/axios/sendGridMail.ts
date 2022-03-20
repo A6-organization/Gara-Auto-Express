@@ -59,7 +59,9 @@ class SendGridMail {
         `Send grid mail to Email: ${toEmail} with subject: ${subject} success`
       );
     } catch (error) {
-      logger.error(error);
+      logger.error(error, {
+        reason: 'EXCEPTION at sendGridSendTemplatedEmail()',
+      });
       throw new Error(`Send grid email fail error: ${error}`);
     }
   }
@@ -77,8 +79,25 @@ class SendGridMail {
         `Send grid mail to verify account success to email: ${email}`
       );
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at sendSignUpEmail()' });
       throw new Error(`Send grid email fail on Sign Up with error: ${error} `);
+    }
+  }
+
+  async sendReminderEmail(email: string) {
+    const name = email.split('@')[0];
+    try {
+      await this.sendGridSendTemplatedEmail(
+        email,
+        name,
+        env.sendGridSignUpTemplateId,
+        'RE-ACTIVE ACCOUNT WITH GARA-AUTO'
+      );
+
+      logger.info(`Send reminder mail success to email: ${email}`);
+    } catch (error) {
+      logger.error(error, { reason: 'EXCEPTION at sendReminderEmail()' });
+      throw new Error(`Send reminder mail fail with error: ${error} `);
     }
   }
 }
