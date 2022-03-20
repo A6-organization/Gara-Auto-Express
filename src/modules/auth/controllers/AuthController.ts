@@ -14,7 +14,7 @@ class AuthController extends TokenServices {
       const result = await UserRepo.findAllUser();
       res.json(result);
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at apiCheck()' });
       throw new InternalServerError();
     }
   };
@@ -32,7 +32,7 @@ class AuthController extends TokenServices {
       await this.signUpAccountService(email, password, roles, gCaptcha, userIP);
       res.send('Account has been created');
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at signUpAccount()' });
       if (error.message) {
         throw new BadRequestError(error.message);
       }
@@ -45,7 +45,7 @@ class AuthController extends TokenServices {
       console.log(req.body);
       res.send(`Welcome to GARA-AUTO ADMIN: `);
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at generateAdminAccount()' });
       throw new InternalServerError(messages.somethingWentWrongMessage);
     }
   };
@@ -60,14 +60,14 @@ class AuthController extends TokenServices {
       res.json({
         statusCode: 200,
         headers: {
-          authorization: `Bearer ${accessToken}`,
+          authorization: `Bearer ${accessToken.trim()}`,
         },
         body: {
-          authorization: `Bearer ${refreshToken}`,
+          authorization: `Bearer ${refreshToken.trim()}`,
         },
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at login()' });
       if (error.message) {
         throw new BadRequestError(error.message);
       }
@@ -82,10 +82,10 @@ class AuthController extends TokenServices {
       const result = await this.regenarateAccessTokenService(token, user);
       res.json({
         statusCode: 200,
-        headers: { authorization: `Bearer ${result}` },
+        headers: { authorization: `Bearer ${result.trim()}` },
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at regenarateAccessToken()' });
       if (error.message) {
         throw new UnauthorizedError(error.message);
       }

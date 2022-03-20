@@ -50,3 +50,22 @@ export interface LoginAttempsCreation
 export enum TimeZone {
   ASIA_HCM = 'Asia/Ho_Chi_Minh',
 }
+
+export enum EmailStatus {
+  SENT = 'SENT',
+  VERIFY = 'VERIFY',
+  UNKNOWN = 'UNKNOWN',
+}
+export interface EmailReminderAttributes {
+  id: number;
+  user_id: number;
+  email_status: EmailStatus;
+  last_send_time: Date;
+}
+
+export interface EmailReminderCreation
+  extends Omit<EmailReminderAttributes, 'id'> {
+  user_id: number;
+  email_status: EmailStatus;
+  last_send_time: Date;
+}

@@ -25,7 +25,7 @@ LoginTokenModel.init(
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
   },

@@ -1,18 +1,21 @@
 import { Model, DataTypes } from 'sequelize';
-import { LoginAttempsCreation, LoginAttempsAttributes } from '../types/common';
 import sequelize from '../../config/sequelize';
+import {
+  EmailStatus,
+  EmailReminderAttributes,
+  EmailReminderCreation,
+} from '../types/common';
 
-class LoginAttempsModel extends Model<
-  LoginAttempsAttributes | LoginAttempsCreation
+class EmailReminderModel extends Model<
+  EmailReminderAttributes | EmailReminderCreation
 > {
   id: number;
   user_id: number;
-  attemps: number;
-  start_time: Date;
-  end_time: Date;
+  email_status: EmailStatus;
+  last_send_time: Date;
 }
 
-LoginAttempsModel.init(
+EmailReminderModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,24 +27,20 @@ LoginAttempsModel.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    attemps: {
-      type: DataTypes.INTEGER,
+    email_status: {
+      type: DataTypes.STRING(20),
       allowNull: false,
     },
-    start_time: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    end_time: {
+    last_send_time: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
   },
   {
-    tableName: 'login_attemps',
+    tableName: 'email_reminder',
     timestamps: false,
     sequelize,
   }
 );
 
-export default LoginAttempsModel;
+export default EmailReminderModel;
