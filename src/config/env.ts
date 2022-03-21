@@ -43,4 +43,8 @@ export default {
   googleRecaptchaSecret: process.env.GOOGLE_CAPTCHA_BACKEND,
   googleRecaptchaDecodeURL: process.env.GOOGLE_CAPTCHA_DECODE_URL,
   googleRecaptchaSample: process.env.GOOGLE_CAPTCHA_SAMPLE,
+
+  //STRIPE
+  stripeTestKey: process.env.STRIPE_API_TEST_KEY,
+  stripeProductionKey: process.env.STRIPE_API_PRODUCTION_KEY,
 };

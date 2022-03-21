@@ -46,7 +46,7 @@ class TokenServices {
       }
       return token;
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at generateToken()' });
       throw new Error(messages.authMessage.NotGenerateToken);
     }
   };
@@ -56,7 +56,7 @@ class TokenServices {
       const result = await LoginTokenRepo.generateRefreshToken(token, user_id);
       return result;
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at saveRefreshToken()' });
       throw new Error(messages.authMessage.NotSaveToken);
     }
   };
@@ -99,7 +99,7 @@ class TokenServices {
         return token;
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { reason: 'EXCEPTION at handleRefreshToken()' });
       throw new Error(`EXCEPTION handleTokenRefreshToken(): ${error}`);
     }
   };
@@ -197,7 +197,7 @@ class TokenServices {
       if (la.attemps === 0) {
         await UserModel.update(
           {
-            status: UserStatus.SUSPEND,
+            status: UserStatus.ONHOLD,
           },
           {
             where: {

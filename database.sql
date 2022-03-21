@@ -18,6 +18,21 @@ CREATE TABLE login_tokens (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+CREATE TABLE [dbo].[login_attemps] (
+    id INT PRIMARY KEY IDENTITY(1, 1),
+    user_id INT NOT NULL,
+    attemps INT NOT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+CREATE TABLE [dbo].[email_reminder] (
+    id INT PRIMARY KEY IDENTITY(1, 1),
+    user_id INT NOT NULL,
+    email_status VARCHAR(20) NOT NULL,
+    last_send_time DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 -- password ducquang123
 INSERT INTO users VALUE (
         DEFAULT,
