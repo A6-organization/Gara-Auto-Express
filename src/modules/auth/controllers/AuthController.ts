@@ -75,6 +75,31 @@ class AuthController extends TokenServices {
     }
   };
 
+  loginDirectly = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      const { accessToken, refreshToken } = await this.loginDirectlyService(
+        email
+      );
+
+      res.json({
+        statusCode: 200,
+        headers: {
+          authorization: `Bearer ${accessToken.trim()}`,
+        },
+        body: {
+          authorization: `Bearer ${refreshToken.trim()}`,
+        },
+      });
+    } catch (error) {
+      logger.error(error, { reason: 'EXCEPTION at loginDirectly()' });
+      if (error.message) {
+        throw new UnauthorizedError(error.message);
+      }
+      throw new InternalServerError(error.message);
+    }
+  };
+
   regenarateAccessToken = async (req: Request, res: Response) => {
     try {
       const user = req.user;
