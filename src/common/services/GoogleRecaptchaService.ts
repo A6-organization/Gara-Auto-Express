@@ -35,9 +35,8 @@ class GoogleRecaptchaService {
       const errorMessage: string[] =
         this.gRecaptchaResponse['data']['error-codes'];
       return errorMessage.join(' ,');
-    } else {
-      return 'valid';
     }
+    return 'valid';
   }
 }
 

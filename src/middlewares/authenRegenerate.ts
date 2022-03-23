@@ -22,13 +22,10 @@ export default async (
           return next();
         }
         return next(new UnauthorizedError());
-      } else {
-        return next(new UnauthorizedError());
       }
-    } else {
       return next(new UnauthorizedError());
     }
-  } else {
     return next(new UnauthorizedError());
   }
+  return next(new UnauthorizedError());
 };
