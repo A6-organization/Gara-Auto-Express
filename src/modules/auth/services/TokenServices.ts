@@ -218,6 +218,28 @@ class TokenServices {
     return { accessToken, refreshToken };
   };
 
+  protected loginDirectlyService = async (email: string) => {
+    const user = await UserRepo.findUserByEmail(email);
+
+    if (user === null) {
+      throw new Error(messages.authMessage.EmailNotExist);
+    }
+
+    switch (user.status) {
+      case UserStatus.INITIAL:
+        throw new Error(messages.authMessage.AccountHaventActivated);
+      case UserStatus.SUSPEND:
+        throw new Error(messages.authMessage.BanAccount);
+      default:
+        break;
+    }
+
+    const accessToken = await this.generateToken(user.email, TokenType.ACCESS);
+    const refreshToken = await this.handleRefreshToken(user);
+
+    return { accessToken, refreshToken };
+  };
+
   protected regenarateAccessTokenService = async (
     token: string,
     user: UsersAttributes
