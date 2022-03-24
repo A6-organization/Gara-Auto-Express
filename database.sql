@@ -1,5 +1,3 @@
-CREATE SCHEMA garaauto;
-USE garaauto;
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     password VARCHAR(100) NOT NULL,
@@ -18,19 +16,21 @@ CREATE TABLE login_tokens (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE TABLE [dbo].[login_attemps] (
-    id INT PRIMARY KEY IDENTITY(1, 1),
-    user_id INT NOT NULL,
-    attemps INT NOT NULL,
+CREATE TABLE login_attemps (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    attemps INT UNSIGNED NOT NULL,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE TABLE [dbo].[email_reminder] (
-    id INT PRIMARY KEY IDENTITY(1, 1),
-    user_id INT NOT NULL,
+CREATE TABLE email_reminder (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
     email_status VARCHAR(20) NOT NULL,
     last_send_time DATETIME NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 -- password ducquang123

@@ -40,11 +40,11 @@ UserModel.init(
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
     recent_login_time: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
   },

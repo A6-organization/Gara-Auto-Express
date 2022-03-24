@@ -29,11 +29,11 @@ LoginAttempsModel.init(
       allowNull: false,
     },
     start_time: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     end_time: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
