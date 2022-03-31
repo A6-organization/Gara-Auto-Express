@@ -1,3 +1,4 @@
+USE garaauto;
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     password VARCHAR(100) NOT NULL,
@@ -16,7 +17,7 @@ CREATE TABLE login_tokens (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE TABLE login_attemps (
+CREATE TABLE login_attempts (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     attempts INT UNSIGNED NOT NULL,
@@ -32,6 +33,32 @@ CREATE TABLE email_reminder (
     last_send_time DATETIME NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+CREATE TABLE brand (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+CREATE TABLE payment_method (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    method VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO payment_method VALUE (DEFAULT, "Paid in full");
+INSERT INTO payment_method VALUE (DEFAULT, "Subscription");
+CREATE TABLE payment_provider (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    provider VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO payment_provider VALUE (DEFAULT, "Stripe");
+INSERT INTO payment_provider VALUE (DEFAULT, "Cash");
+CREATE TABLE error_recorder (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    destination VARCHAR(100) NOT NULL,
+    reason TEXT NOT NULL,
+    created_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
 );
 -- password ducquang123
 INSERT INTO users VALUE (
