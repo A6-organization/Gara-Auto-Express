@@ -8,6 +8,7 @@ import { SignInBody, SignUpBody } from '../types/auth';
 import BadRequestError from '../../../common/errors/types/BadRequestError';
 import UnauthorizedError from '../../../common/errors/types/UnaithorizedError';
 import { BLOCK_IPS } from '../../../common/constants';
+import ErrorRecorderRepo from '../../../common/repositories/ErrorRecorderRepo';
 class AuthController extends TokenServices {
   apiCheck = async (_req: Request, res: Response) => {
     try {
@@ -33,6 +34,7 @@ class AuthController extends TokenServices {
       res.send('Account has been created');
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at signUpAccount()' });
+      await ErrorRecorderRepo.logger('signUpAccount()', String(error));
       if (error.message) {
         throw new BadRequestError(error.message);
       }
@@ -46,6 +48,7 @@ class AuthController extends TokenServices {
       res.send(`Welcome to GARA-AUTO ADMIN: `);
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at generateAdminAccount()' });
+      await ErrorRecorderRepo.logger('generateAdminAccount()', String(error));
       throw new InternalServerError(messages.somethingWentWrongMessage);
     }
   };
@@ -68,6 +71,7 @@ class AuthController extends TokenServices {
       });
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at login()' });
+      await ErrorRecorderRepo.logger('login()', String(error));
       if (error.message) {
         throw new BadRequestError(error.message);
       }
@@ -93,6 +97,7 @@ class AuthController extends TokenServices {
       });
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at loginDirectly()' });
+      await ErrorRecorderRepo.logger('loginDirectly()', String(error));
       if (error.message) {
         throw new UnauthorizedError(error.message);
       }
@@ -100,17 +105,23 @@ class AuthController extends TokenServices {
     }
   };
 
-  regenarateAccessToken = async (req: Request, res: Response) => {
+  regenerateAccessToken = async (req: Request, res: Response) => {
     try {
       const user = req.user;
       const token = req.headers.authorization.split(' ')[1];
-      const result = await this.regenarateAccessTokenService(token, user);
+      const result = await this.regenerateAccessTokenService(token, user);
       res.json({
         statusCode: 200,
         headers: { authorization: `Bearer ${result.trim()}` },
       });
     } catch (error) {
-      logger.error(error, { reason: 'EXCEPTION at regenarateAccessToken()' });
+      logger.error(error, {
+        reason: 'EXCEPTION at regenerateAccessTokenService()',
+      });
+      await ErrorRecorderRepo.logger(
+        'regenerateAccessTokenService()',
+        String(error)
+      );
       if (error.message) {
         throw new UnauthorizedError(error.message);
       }

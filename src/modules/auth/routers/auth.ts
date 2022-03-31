@@ -39,7 +39,7 @@ router.post(
 router.post(
   '/gen-new-token',
   [authenRegenerate],
-  wrapper(AuthController.regenarateAccessToken)
+  wrapper(AuthController.regenerateAccessToken)
 );
 
 router.get('');

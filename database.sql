@@ -19,7 +19,7 @@ CREATE TABLE login_tokens (
 CREATE TABLE login_attemps (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
-    attemps INT UNSIGNED NOT NULL,
+    attempts INT UNSIGNED NOT NULL,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     PRIMARY KEY (id),

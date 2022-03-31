@@ -10,14 +10,7 @@ export interface UsersAttributes {
   recent_login_time: Date;
 }
 
-export interface UsersCreation extends Omit<UsersAttributes, 'id'> {
-  password: string;
-  roles: UserRoles | string;
-  status: UserStatus | string;
-  email: string;
-  created_at: Date;
-  recent_login_time: Date;
-}
+export type UsersCreation = Omit<UsersAttributes, 'id'>;
 
 export interface LoginTokenAttributes {
   id: number;
@@ -25,27 +18,18 @@ export interface LoginTokenAttributes {
   user_id: number;
   created_at: Date;
 }
-export interface LoginTokenCreation extends Omit<LoginTokenAttributes, 'id'> {
-  token: string;
-  user_id: number;
-  created_at: Date;
-}
 
-export interface LoginAttempsAttributes {
+export type LoginTokenCreation = Omit<LoginTokenAttributes, 'id'>;
+
+export interface LoginAttemptsAttributes {
   id: number;
   user_id: number;
-  attemps: number;
+  attempts: number;
   start_time: Date;
   end_time: Date;
 }
 
-export interface LoginAttempsCreation
-  extends Omit<LoginAttempsAttributes, 'id'> {
-  user_id: number;
-  attemps: number;
-  start_time: Date;
-  end_time: Date;
-}
+export type LoginAttemptsCreation = Omit<LoginAttemptsAttributes, 'id'>;
 
 export enum TimeZone {
   ASIA_HCM = 'Asia/Ho_Chi_Minh',
@@ -63,9 +47,13 @@ export interface EmailReminderAttributes {
   last_send_time: Date;
 }
 
-export interface EmailReminderCreation
-  extends Omit<EmailReminderAttributes, 'id'> {
-  user_id: number;
-  email_status: EmailStatus;
-  last_send_time: Date;
+export type EmailReminderCreation = Omit<EmailReminderAttributes, 'id'>;
+
+export interface ErrorRecorderAttributes {
+  id: number;
+  destination: string;
+  reason: string;
+  created_at: Date;
 }
+
+export type ErrorRecorderCreation = Omit<ErrorRecorderAttributes, 'id'>;

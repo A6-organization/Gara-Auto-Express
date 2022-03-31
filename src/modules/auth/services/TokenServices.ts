@@ -13,7 +13,7 @@ import UserModel from '../../../common/models/UserModel';
 import sendGridMail from '../../../common/axios/sendGridMail';
 import { UsersAttributes } from '../../../common/types/common';
 import dayjs from 'dayjs';
-import LoginAttempsRepo from '../../../common/repositories/LoginAttempsRepo';
+import LoginAttemptsRepo from '../../../common/repositories/LoginAttempsRepo';
 import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
 import GoogleRecaptchaService from '../../../common/services/GoogleRecaptchaService';
 
@@ -53,8 +53,7 @@ class TokenServices {
 
   protected saveRefreshToken = async (user_id: number, token: string) => {
     try {
-      const result = await LoginTokenRepo.generateRefreshToken(token, user_id);
-      return result;
+      return await LoginTokenRepo.generateRefreshToken(token, user_id);
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at saveRefreshToken()' });
       throw new Error(messages.authMessage.NotSaveToken);
@@ -65,9 +64,12 @@ class TokenServices {
     try {
       const tokenExist = await LoginTokenRepo.getRefreshTokenByUserId(user.id);
       if (tokenExist === null) {
-        const token = await this.generateToken(user.email, TokenType.REFRESH);
+        const existedToken = await this.generateToken(
+          user.email,
+          TokenType.REFRESH
+        );
         const newToken = await LoginTokenRepo.generateRefreshToken(
-          token,
+          existedToken,
           user.id
         );
 
@@ -152,7 +154,7 @@ class TokenServices {
   }
 
   protected loginService = async (email: string, password: string) => {
-    const [user, userWithAttemps] = await Promise.all([
+    const [user, userWithAttempts] = await Promise.all([
       UserRepo.findUserByEmail(email),
       UserRepo.findUserDetailsByEmail(email),
     ]);
@@ -170,34 +172,34 @@ class TokenServices {
         break;
     }
 
-    if (userWithAttemps['attemps'] === null) {
-      await LoginAttempsRepo.createNewRecord(user.id);
+    if (userWithAttempts['attempts'] === null) {
+      await LoginAttemptsRepo.createNewRecord(user.id);
 
-      logger.info(`Create new Login Attemps for user with id: ${user.id}`);
+      logger.info(`Create new Login attempts for user with id: ${user.id}`);
     } else {
-      const end_time = userWithAttemps['attemps']['end_time'];
+      const end_time = userWithAttempts['attempts']['end_time'];
       const crrDate = new Date();
 
       if (compareDate1GreaterDate2(crrDate, end_time) === true) {
-        await LoginAttempsRepo.updateRecord(
+        await LoginAttemptsRepo.updateRecord(
           user.id,
           7,
           crrDate,
           dayjs(crrDate).add(2, 'h').toDate()
         );
 
-        logger.info(`Update new Login Attemps for user with id: ${user.id}`);
+        logger.info(`Update new Login attempts for user with id: ${user.id}`);
       }
     }
 
-    const la = await LoginAttempsRepo.getRecordByUserID(user.id);
+    const la = await LoginAttemptsRepo.getRecordByUserID(user.id);
 
     const correctPassword = await compareSaltPassword(password, user.password);
     if (!correctPassword) {
-      if (la.attemps === 0) {
+      if (la.attempts === 0) {
         await UserModel.update(
           {
-            status: UserStatus.ONHOLD,
+            status: UserStatus.ON_HOLD,
           },
           {
             where: {
@@ -206,7 +208,7 @@ class TokenServices {
           }
         );
       } else {
-        la.attemps = la.attemps - 1;
+        la.attempts = la.attempts - 1;
         await la.save();
       }
 
@@ -240,7 +242,7 @@ class TokenServices {
     return { accessToken, refreshToken };
   };
 
-  protected regenarateAccessTokenService = async (
+  protected regenerateAccessTokenService = async (
     token: string,
     user: UsersAttributes
   ) => {
@@ -258,9 +260,7 @@ class TokenServices {
       throw new Error(messages.authMessage.TokenExpired);
     }
 
-    const accessToken = await this.generateToken(user.email, TokenType.ACCESS);
-
-    return accessToken;
+    return this.generateToken(user.email, TokenType.ACCESS);
   };
 }
 

@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import LoginAttempsModel from '../models/LoginAttempsModel';
+import LoginAttemptsModel from '../models/LoginAttemptsModel';
 
-class LoginAttempsRepo {
+class LoginAttemptsRepo {
   async createNewRecord(user_id: number) {
-    await LoginAttempsModel.create({
+    await LoginAttemptsModel.create({
       user_id,
-      attemps: 7,
+      attempts: 5,
       start_time: new Date(),
       end_time: dayjs(new Date()).add(2, 'h').toDate(),
     });
@@ -13,13 +13,13 @@ class LoginAttempsRepo {
 
   async updateRecord(
     user_id: number,
-    attemps: number,
+    attempts: number,
     start_time: Date,
     end_time: Date
   ) {
-    await LoginAttempsModel.update(
+    await LoginAttemptsModel.update(
       {
-        attemps,
+        attempts,
         start_time,
         end_time,
       },
@@ -32,7 +32,7 @@ class LoginAttempsRepo {
   }
 
   async getRecordByUserID(user_id: number) {
-    return LoginAttempsModel.findOne({
+    return LoginAttemptsModel.findOne({
       where: {
         user_id,
       },
@@ -40,4 +40,4 @@ class LoginAttempsRepo {
   }
 }
 
-export default new LoginAttempsRepo();
+export default new LoginAttemptsRepo();

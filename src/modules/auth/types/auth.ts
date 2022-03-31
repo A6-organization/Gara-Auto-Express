@@ -1,7 +1,7 @@
 export enum UserStatus {
   INITIAL = 'INITIAL',
   ACTIVE = 'ACTIVE',
-  ONHOLD = 'ON-HOLD',
+  ON_HOLD = 'ON-HOLD',
   SUSPEND = 'SUSPEND',
   INACTIVE = 'IN-ACTIVE',
 }
@@ -20,10 +20,7 @@ export interface SignUpBody {
   roles?: string;
 }
 
-export interface SignInBody extends Omit<SignUpBody, 'roles'> {
-  email: string;
-  password: string;
-}
+export type SignInBody = Omit<SignUpBody, 'roles'>;
 
 export enum TokenType {
   ACCESS = 'Access',

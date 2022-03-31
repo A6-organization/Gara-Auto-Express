@@ -1,5 +1,5 @@
 import { UserStatus } from './../../modules/auth/types/auth';
-import LoginAttempsModel from '../models/LoginAttempsModel';
+import LoginAttemptsModel from '../models/LoginAttemptsModel';
 import UserModel from '../models/UserModel';
 
 class UserRepository {
@@ -25,8 +25,8 @@ class UserRepository {
       },
       include: [
         {
-          model: LoginAttempsModel,
-          as: 'attemps',
+          model: LoginAttemptsModel,
+          as: 'attempts',
         },
       ],
     });
