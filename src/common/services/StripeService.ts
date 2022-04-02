@@ -19,6 +19,7 @@ class StripeService {
   private stripeAPIkey: string;
   private environment: CodeEnvironment;
   private stripeWorker: Stripe;
+
   constructor() {
     this.environment = CodeEnvironment.Local;
     this.stripeAPIkey =

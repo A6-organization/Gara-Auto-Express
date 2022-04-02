@@ -11,7 +11,10 @@ import {
 } from '../../../common/helpers/bcrypt';
 import UserModel from '../../../common/models/UserModel';
 import sendGridMail from '../../../common/axios/sendGridMail';
-import { UsersAttributes } from '../../../common/types/common';
+import {
+  UserIncludeLoginAttempts,
+  UsersAttributes,
+} from '../../../common/types/common';
 import dayjs from 'dayjs';
 import LoginAttemptsRepo from '../../../common/repositories/LoginAttempsRepo';
 import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
@@ -60,7 +63,9 @@ class TokenServices {
     }
   };
 
-  protected handleRefreshToken = async (user: UsersAttributes) => {
+  protected handleRefreshToken = async (
+    user: UserIncludeLoginAttempts | UsersAttributes
+  ) => {
     try {
       const tokenExist = await LoginTokenRepo.getRefreshTokenByUserId(user.id);
       if (tokenExist === null) {
@@ -154,10 +159,7 @@ class TokenServices {
   }
 
   protected loginService = async (email: string, password: string) => {
-    const [user, userWithAttempts] = await Promise.all([
-      UserRepo.findUserByEmail(email),
-      UserRepo.findUserDetailsByEmail(email),
-    ]);
+    const user = await UserRepo.findUserDetailsByEmail(email);
 
     if (user === null) {
       throw new Error(messages.authMessage.EmailNotExist);
@@ -172,12 +174,12 @@ class TokenServices {
         break;
     }
 
-    if (userWithAttempts['attempts'] === null) {
+    if (user.attempts === null) {
       await LoginAttemptsRepo.createNewRecord(user.id);
 
       logger.info(`Create new Login attempts for user with id: ${user.id}`);
     } else {
-      const end_time = userWithAttempts['attempts']['end_time'];
+      const end_time = user.attempts.end_time;
       const crrDate = new Date();
 
       if (compareDate1GreaterDate2(crrDate, end_time) === true) {
