@@ -1,3 +1,4 @@
+import { JwtPayload } from 'jsonwebtoken';
 import { UserRoles, UserStatus } from '../../modules/auth/types/auth';
 
 export interface UsersAttributes {
@@ -57,3 +58,28 @@ export interface ErrorRecorderAttributes {
 }
 
 export type ErrorRecorderCreation = Omit<ErrorRecorderAttributes, 'id'>;
+
+export type ExitedField<E> = {
+  [Property in keyof E]: E[Property];
+};
+
+export type AdditionalField<A> = {
+  [Property in keyof A]: A[Property];
+};
+
+export type JoinedQueryType<E, A> = ExitedField<Partial<E>> &
+  AdditionalField<A>;
+
+export interface AttemptsIncludeAttributes {
+  attempts: LoginAttemptsAttributes;
+}
+
+export type UserIncludeLoginAttempts = JoinedQueryType<
+  UsersAttributes,
+  AttemptsIncludeAttributes
+>;
+
+export interface TokenDecode extends JwtPayload {
+  type?: string;
+  user?: string;
+}
