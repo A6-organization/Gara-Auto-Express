@@ -1,4 +1,6 @@
+import sendGridMail, { MailDataRequired, MailService } from '@sendgrid/mail';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import env from '../../config/env';
 import { logger } from '../helpers/logger';
 
@@ -7,12 +9,14 @@ class SendGridMail {
   protected adminName: string;
   protected apiUrl: string;
   protected apiKey: string;
+  protected sgMail: MailService = sendGridMail;
 
   constructor() {
     this.adminEmail = env.sendGridFromEmail;
     this.adminName = env.sendGridFromEmailName;
     this.apiUrl = env.sendGridApiUrl;
     this.apiKey = env.sendGridApiKey;
+    this.sgMail.setApiKey(env.sendGridApiKey);
   }
 
   async sendGridSendTemplatedEmail(
@@ -63,6 +67,37 @@ class SendGridMail {
         reason: 'EXCEPTION at sendGridSendTemplatedEmail()',
       });
       throw new Error(`Send grid email fail error: ${error}`);
+    }
+  }
+
+  async sendGridSendEmailWithEmbed(
+    link: string,
+    userEmail: string,
+    subject: string,
+    templateId: string
+  ) {
+    try {
+      const email: MailDataRequired = {
+        from: this.adminEmail,
+        to: userEmail,
+        personalizations: [
+          {
+            to: userEmail,
+            subject,
+            sendAt: dayjs().valueOf(),
+            dynamicTemplateData: {
+              link,
+            },
+          },
+        ],
+        templateId,
+      };
+
+      return await this.sgMail.send(email);
+    } catch (error) {
+      logger.error(error, {
+        reason: 'EXCEPTION at sendGridSendEmailWithEmbed()',
+      });
     }
   }
 

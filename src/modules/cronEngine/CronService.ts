@@ -11,7 +11,7 @@ class CronService {
   async updateUserStatusToActive() {
     const users = await UserRepo.getAllUser();
     for (const user of users) {
-      if (user.status === UserStatus.ONHOLD) {
+      if (user.status === UserStatus.ON_HOLD) {
         user.status = UserStatus.ACTIVE;
         user.save();
       }

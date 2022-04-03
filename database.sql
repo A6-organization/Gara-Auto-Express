@@ -1,4 +1,3 @@
-CREATE SCHEMA garaauto;
 USE garaauto;
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -18,20 +17,48 @@ CREATE TABLE login_tokens (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE TABLE [dbo].[login_attemps] (
-    id INT PRIMARY KEY IDENTITY(1, 1),
-    user_id INT NOT NULL,
-    attemps INT NOT NULL,
+CREATE TABLE login_attempts (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    attempts INT UNSIGNED NOT NULL,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-CREATE TABLE [dbo].[email_reminder] (
-    id INT PRIMARY KEY IDENTITY(1, 1),
-    user_id INT NOT NULL,
+CREATE TABLE email_reminder (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
     email_status VARCHAR(20) NOT NULL,
     last_send_time DATETIME NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+CREATE TABLE brand (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+CREATE TABLE payment_method (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    method VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO payment_method VALUE (DEFAULT, "Paid in full");
+INSERT INTO payment_method VALUE (DEFAULT, "Subscription");
+CREATE TABLE payment_provider (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    provider VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO payment_provider VALUE (DEFAULT, "Stripe");
+INSERT INTO payment_provider VALUE (DEFAULT, "Cash");
+CREATE TABLE error_recorder (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    destination VARCHAR(100) NOT NULL,
+    reason TEXT NOT NULL,
+    created_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
 );
 -- password ducquang123
 INSERT INTO users VALUE (

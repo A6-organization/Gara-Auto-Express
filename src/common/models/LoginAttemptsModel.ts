@@ -1,18 +1,21 @@
 import { Model, DataTypes } from 'sequelize';
-import { LoginAttempsCreation, LoginAttempsAttributes } from '../types/common';
+import {
+  LoginAttemptsCreation,
+  LoginAttemptsAttributes,
+} from '../types/common';
 import sequelize from '../../config/sequelize';
 
-class LoginAttempsModel extends Model<
-  LoginAttempsAttributes | LoginAttempsCreation
+class LoginAttemptsModel extends Model<
+  LoginAttemptsAttributes | LoginAttemptsCreation
 > {
   id: number;
   user_id: number;
-  attemps: number;
+  attempts: number;
   start_time: Date;
   end_time: Date;
 }
 
-LoginAttempsModel.init(
+LoginAttemptsModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,24 +27,24 @@ LoginAttempsModel.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    attemps: {
+    attempts: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     start_time: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     end_time: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
   {
-    tableName: 'login_attemps',
+    tableName: 'login_attempts',
     timestamps: false,
     sequelize,
   }
 );
 
-export default LoginAttempsModel;
+export default LoginAttemptsModel;

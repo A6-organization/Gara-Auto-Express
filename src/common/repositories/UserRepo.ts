@@ -1,15 +1,16 @@
 import { UserStatus } from './../../modules/auth/types/auth';
-import LoginAttempsModel from '../models/LoginAttempsModel';
+import LoginAttemptsModel from '../models/LoginAttemptsModel';
 import UserModel from '../models/UserModel';
+import { UserIncludeLoginAttempts, UsersAttributes } from '../types/common';
 
 class UserRepository {
-  async findAllUser() {
+  async findAllUser(): Promise<UsersAttributes[]> {
     return UserModel.findAll({
       raw: true,
     });
   }
 
-  async findUserByEmail(email: string) {
+  async findUserByEmail(email: string): Promise<UsersAttributes> {
     return UserModel.findOne({
       where: {
         email,
@@ -18,18 +19,22 @@ class UserRepository {
     });
   }
 
-  async findUserDetailsByEmail(email: string) {
-    return UserModel.findOne({
+  async findUserDetailsByEmail(
+    email: string
+  ): Promise<UserIncludeLoginAttempts> {
+    const temp = (await UserModel.findOne({
       where: {
         email,
       },
       include: [
         {
-          model: LoginAttempsModel,
-          as: 'attemps',
+          model: LoginAttemptsModel,
+          as: 'attempts',
         },
       ],
-    });
+    })) as unknown;
+
+    return temp as UserIncludeLoginAttempts;
   }
 
   async getAllUser() {

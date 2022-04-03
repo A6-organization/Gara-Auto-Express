@@ -1,3 +1,4 @@
+import { GoogleCaptchaResponse } from './../types/gCaptcha';
 import env from '../../config/env';
 import axios from 'axios';
 import { logger } from '../helpers/logger';
@@ -6,7 +7,7 @@ class GoogleRecaptchaService {
   private gRecaptchaSecret: string;
   private gRecaptchaURL: string;
   private gRecaptchaSample: string;
-  private gRecaptchaResponse: object;
+  private gRecaptchaResponse: GoogleCaptchaResponse;
 
   constructor() {
     this.gRecaptchaSecret = env.googleRecaptchaSecret;
@@ -18,7 +19,7 @@ class GoogleRecaptchaService {
   async verifyRecaptcha(ip: string, captcha?: string): Promise<string> {
     const body = {
       secret: this.gRecaptchaSecret,
-      response: captcha || this.gRecaptchaSample,
+      response: captcha || this.gRecaptchaSample || 'sample-test-captcha',
       remoteip: ip,
     };
 
@@ -29,11 +30,11 @@ class GoogleRecaptchaService {
       body
     );
 
-    const isValid = this.gRecaptchaResponse['data']['success'];
+    const isValid = this.gRecaptchaResponse.data.success;
 
     if (!isValid) {
       const errorMessage: string[] =
-        this.gRecaptchaResponse['data']['error-codes'];
+        this.gRecaptchaResponse.data['error-codes'];
       return errorMessage.join(' ,');
     }
     return 'valid';

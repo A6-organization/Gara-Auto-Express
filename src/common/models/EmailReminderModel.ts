@@ -32,7 +32,7 @@ EmailReminderModel.init(
       allowNull: false,
     },
     last_send_time: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
