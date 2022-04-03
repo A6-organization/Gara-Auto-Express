@@ -13,3 +13,5 @@ router.get('/', (_req: Request, res: Response) => {
 router.use('/auth', authRoutes);
 
 export default router;
+
+//Hello quang bech
