@@ -1,10 +1,11 @@
 import express from 'express';
 import { validate } from 'express-validation';
 import wrapper from '../../../common/helpers/wrapperController';
-import authenRegenerate from '../../../middlewares/authenRegenerate';
+import authenticateRegenerate from '../../../middlewares/authenRegenerate';
 import authentication from '../../../middlewares/authentication';
 import loginEngineDirectly from '../../../middlewares/loginEngineDirectly';
 import validateAdmin from '../../../middlewares/validateAdmin';
+import validateExpiryToken from '../../../middlewares/validateExpiryToken';
 import AuthController from '../controllers/AuthController';
 import authRequest from '../request/authRequest';
 
@@ -20,7 +21,7 @@ router.post(
 
 router.post(
   '/admin/sign-up',
-  [authentication, validateAdmin],
+  [validateExpiryToken, authentication, validateAdmin],
   wrapper(AuthController.generateAdminAccount)
 );
 
@@ -38,10 +39,8 @@ router.post(
 
 router.post(
   '/gen-new-token',
-  [authenRegenerate],
+  [validateExpiryToken, authenticateRegenerate],
   wrapper(AuthController.regenerateAccessToken)
 );
-
-router.get('');
 
 export default router;

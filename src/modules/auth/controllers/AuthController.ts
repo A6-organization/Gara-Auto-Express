@@ -128,6 +128,14 @@ class AuthController extends TokenServices {
       throw new InternalServerError(error.message);
     }
   };
+
+  checkValidToken = (_req: Request, res: Response) => {
+    try {
+      res.send();
+    } catch (error) {
+      throw new UnauthorizedError();
+    }
+  };
 }
 
 export default new AuthController();
