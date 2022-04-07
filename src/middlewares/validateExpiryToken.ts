@@ -17,6 +17,7 @@ async function validateRefreshTokenInfo(
   jwtToken: string
 ): Promise<boolean> {
   const currentUser = await UserRepo.findUserByEmail(user);
+
   if (currentUser === null) {
     return false;
   }

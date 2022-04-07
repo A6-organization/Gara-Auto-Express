@@ -60,6 +60,48 @@ CREATE TABLE error_recorder (
     created_at DATETIME NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE cars (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    brand_id INT UNSIGNED NOT NULL,
+    name VARCHAR(255),
+    price NUMERIC,
+    discount_percent int,
+    description TEXT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (brand_id) REFERENCES brand(id)
+);
+
+CREATE TABLE car_apperance (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    car_id INT UNSIGNED NOT NULL,
+    img text,
+    color varchar(30),
+    PRIMARY KEY (id),
+    FOREIGN KEY (car_id) REFERENCES cars(id)
+);
+
+CREATE TABLE client_coupon (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    client_id INT UNSIGNED NOT NULL,
+    coupon_id INT UNSIGNED NOT NULL,
+    used_at datetime,
+    car_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (client_id) REFERENCES client_info(id),
+    FOREIGN KEY (coupon_id) REFERENCES coupon(id),
+    FOREIGN KEY (car_id) REFERENCES cars(id)
+);
+
+CREATE TABLE wish_list (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    client_id INT UNSIGNED NOT NULL,
+    car_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (client_id) REFERENCES client_info(id),
+    FOREIGN KEY (car_id) REFERENCES cars(id)
+);
+
 -- password ducquang123
 INSERT INTO users VALUE (
         DEFAULT,

@@ -59,6 +59,89 @@ export interface ErrorRecorderAttributes {
 
 export type ErrorRecorderCreation = Omit<ErrorRecorderAttributes, 'id'>;
 
+export interface BrandAttributes {
+  id: number;
+  name: string;
+}
+
+export type BrandCreation = Omit<BrandAttributes, 'id'>;
+
+export interface CarAppearanceAttributes {
+  id: number;
+  car_id: number;
+  img: string;
+  color: string;
+}
+
+export type CarAppearanceCreation = Omit<CarAppearanceAttributes, 'id'>;
+
+export interface CarAttributes {
+  id: number;
+  brand_id: number;
+  name: string;
+  price: number;
+  discount_percent: number;
+  description: string;
+}
+
+export type CarCreation = Omit<CarAttributes, 'id'>;
+
+export interface ClientCouponAttributes {
+  id: number;
+  client_id: number;
+  coupon_id: number;
+  car_id: number;
+  used_at: Date;
+}
+
+export type ClientCouponCreation = Omit<ClientCouponAttributes, 'id'>;
+export interface CouponAttributes {
+  id: number;
+  code: string;
+  description: string;
+  amount: number;
+}
+
+export type CouponCreation = Omit<CouponAttributes, 'id'>;
+export interface PaymentMethodAttributes {
+  id: number;
+  method: string;
+}
+
+export type PaymentMethodCreation = Omit<PaymentMethodAttributes, 'id'>;
+export interface PaymentProviderAttributes {
+  id: number;
+  provider: string;
+}
+
+export type PaymentProviderCreation = Omit<PaymentProviderAttributes, 'id'>;
+export interface WishListAttributes {
+  id: number;
+  client_id: number;
+  car_id: number;
+}
+
+export type WishListCreation = Omit<WishListAttributes, 'id'>;
+
+export interface ClientAttributes {
+  id: number;
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  gender: string;
+  phone_number: string;
+  dob: Date;
+  address_country: string;
+  address_province: number;
+  address_district: number;
+  address_ward: number;
+  address_detail: string;
+  timezone: string;
+  stripe_customer_id: string;
+}
+
+export type ClientCreation = Omit<ClientAttributes, 'id'>;
+
 export type ExitedField<E> = {
   [Property in keyof E]: E[Property];
 };
