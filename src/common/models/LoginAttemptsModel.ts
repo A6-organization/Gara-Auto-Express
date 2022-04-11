@@ -8,11 +8,11 @@ import sequelize from '../../config/sequelize';
 class LoginAttemptsModel extends Model<
   LoginAttemptsAttributes | LoginAttemptsCreation
 > {
-  id: number;
-  user_id: number;
-  attempts: number;
-  start_time: Date;
-  end_time: Date;
+  declare id: number;
+  declare user_id: number;
+  declare attempts: number;
+  declare start_time: Date;
+  declare end_time: Date;
 }
 
 LoginAttemptsModel.init(

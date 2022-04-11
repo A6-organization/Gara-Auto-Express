@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import LoginAttemptsRepo from '../../../common/repositories/LoginAttempsRepo';
 import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
 import GoogleRecaptchaService from '../../../common/services/GoogleRecaptchaService';
+import ClientModel from '../../../common/models/ClientModel';
 
 class TokenServices {
   protected generateToken = async (email: string, type: TokenType) => {
@@ -145,13 +146,29 @@ class TokenServices {
 
     password = await generateSaltPassword(password);
 
-    await UserModel.create({
+    const newUser = await UserModel.create({
       status: UserStatus.INITIAL,
       created_at: new Date(),
       email,
       password,
       roles,
       recent_login_time: null,
+    });
+
+    await ClientModel.create({
+      user_id: newUser.id,
+      first_name: '',
+      last_name: '',
+      gender: '',
+      phone_number: '',
+      dob: null,
+      address_country: '',
+      address_province: null,
+      address_district: null,
+      address_ward: null,
+      address_detail: '',
+      timezone: '',
+      stripe_customer_id: '',
     });
 
     const name = email.split('@')[0];
