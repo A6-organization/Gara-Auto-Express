@@ -20,6 +20,7 @@ import LoginAttemptsRepo from '../../../common/repositories/LoginAttempsRepo';
 import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
 import GoogleRecaptchaService from '../../../common/services/GoogleRecaptchaService';
 import ClientModel from '../../../common/models/ClientModel';
+import generator from 'generate-password';
 
 class TokenServices {
   protected generateToken = async (email: string, type: TokenType) => {
@@ -173,6 +174,34 @@ class TokenServices {
 
     const name = email.split('@')[0];
     await sendGridMail.sendSignUpEmail(email, name);
+  }
+
+  protected async signUpAdminService(email: string, role: string) {
+    const userExist = await UserRepo.findUserByEmail(email);
+    if (userExist) {
+      throw new Error(messages.userMessage.EmailExist);
+    }
+
+    // Password have 8 character include number, uppercase, lowercase.Example password: 90wDDBfG
+    const password = generator.generate({
+      length: 8,
+      numbers: true,
+    });
+
+    const hashPassword = await generateSaltPassword(password);
+
+    await UserModel.create({
+      status: UserStatus.INITIAL,
+      created_at: new Date(),
+      email,
+      password: hashPassword,
+      roles: role.toUpperCase(),
+      recent_login_time: null,
+    });
+
+    return { email, password, role };
+
+    //sendGrid
   }
 
   protected loginService = async (email: string, password: string) => {
