@@ -43,9 +43,16 @@ class AuthController extends TokenServices {
   };
 
   generateAdminAccount = async (req: Request, res: Response) => {
+    const { email, role } = req.body;
     try {
-      console.log(req.body);
-      res.send(`Welcome to GARA-AUTO ADMIN: `);
+      const data = await this.signUpAdminService(email, role);
+      const message = `${
+        role.charAt(0).toUpperCase() + role.slice(1)
+      } account has been created`;
+      res.json({
+        message,
+        data,
+      });
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at generateAdminAccount()' });
       await ErrorRecorderRepo.logger('generateAdminAccount()', String(error));
