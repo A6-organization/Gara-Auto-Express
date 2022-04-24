@@ -25,12 +25,20 @@ class AuthController extends TokenServices {
     res: Response
   ) => {
     const userIP = req.socket.remoteAddress;
-    const { email, password, roles, gCaptcha } = req.body;
+    const { firstName, lastName, email, password, roles, gCaptcha } = req.body;
     try {
       if (BLOCK_IPS.includes(userIP)) {
         throw new Error(messages.authMessage.IpAddressBeenBlock);
       }
-      await this.signUpAccountService(email, password, roles, gCaptcha, userIP);
+      await this.signUpAccountService(
+        firstName,
+        lastName,
+        email,
+        password,
+        roles,
+        gCaptcha,
+        userIP
+      );
       res.send('Account has been created');
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at signUpAccount()' });

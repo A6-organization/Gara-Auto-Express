@@ -14,6 +14,8 @@ export enum UserRoles {
 }
 
 export interface SignUpBody {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   gCaptcha: string;

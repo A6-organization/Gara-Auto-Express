@@ -9,6 +9,8 @@ export default {
   },
   signUpBody: {
     body: Joi.object({
+      firstName: Joi.string().allow(null, ''),
+      lastName: Joi.string().allow(null, ''),
       email: Joi.string().required(),
       password: Joi.string().required(),
       gCaptcha: Joi.string().required(),

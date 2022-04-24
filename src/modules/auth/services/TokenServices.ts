@@ -114,6 +114,8 @@ class TokenServices {
   };
 
   protected async signUpAccountService(
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
     roles: string,
@@ -158,8 +160,8 @@ class TokenServices {
 
     await ClientModel.create({
       user_id: newUser.id,
-      first_name: '',
-      last_name: '',
+      first_name: firstName,
+      last_name: lastName,
       gender: '',
       phone_number: '',
       dob: null,
