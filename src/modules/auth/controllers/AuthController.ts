@@ -39,7 +39,7 @@ class AuthController extends TokenServices {
         gCaptcha,
         userIP
       );
-      res.send('Account has been created');
+      res.send('Account has been created, check your mail for verification');
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at signUpAccount()' });
       await ErrorRecorderRepo.logger('signUpAccount()', String(error));
