@@ -3,6 +3,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import env from '../../config/env';
 import { logger } from '../helpers/logger';
+import { UsersAttributes } from '../types/common';
 
 class SendGridMail {
   protected adminEmail: string;
@@ -101,24 +102,6 @@ class SendGridMail {
     }
   }
 
-  async sendSignUpEmail(email: string, name: string) {
-    try {
-      await this.sendGridSendTemplatedEmail(
-        email,
-        name,
-        env.sendGridSignUpTemplateId,
-        'VERIFIED USER OF GARA-AUTO'
-      );
-
-      logger.info(
-        `Send grid mail to verify account success to email: ${email}`
-      );
-    } catch (error) {
-      logger.error(error, { reason: 'EXCEPTION at sendSignUpEmail()' });
-      throw new Error(`Send grid email fail on Sign Up with error: ${error} `);
-    }
-  }
-
   async sendReminderEmail(email: string) {
     const name = email.split('@')[0];
     try {
@@ -133,6 +116,95 @@ class SendGridMail {
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at sendReminderEmail()' });
       throw new Error(`Send reminder mail fail with error: ${error} `);
+    }
+  }
+
+  public async sendSignUpTemplate(user: UsersAttributes, token: string) {
+    try {
+      const message: MailDataRequired = {
+        from: this.adminEmail,
+        to: user.email,
+        personalizations: [
+          {
+            to: [{ email: user.email }],
+            subject: 'Welcome to the Gara-Auto Dream!',
+            dynamicTemplateData: {
+              email: user.email,
+              link: `${env.frontBaseUrl}/auth/user/sign-up/validate/${token}`,
+            },
+          },
+        ],
+        templateId: env.sendGridSignUpTemplateId,
+      };
+      const response = (await this.sgMail.send(message))[0];
+      logger.info(
+        `sendSignUpTemplate returned with status: ${response.statusCode}`
+      );
+    } catch (error) {
+      logger.error(error, {
+        reason: 'EXCEPTION: sendSignUpTemplate() ',
+      });
+      throw new Error(error);
+    }
+  }
+
+  public async sendPasswordRecoverTemplate(
+    user: UsersAttributes,
+    token: string
+  ) {
+    try {
+      const message: MailDataRequired = {
+        from: this.adminEmail,
+        to: user.email,
+        personalizations: [
+          {
+            to: [{ email: user.email }],
+            subject: 'Recover password with GARA-AUTO!',
+            dynamicTemplateData: {
+              email: user.email,
+              link: `${env.frontBaseUrl}/auth/user/password-recover/validate/${token}`,
+            },
+          },
+        ],
+        templateId: env.sendGridPWRecoverTemplateId,
+      };
+      const response = (await this.sgMail.send(message))[0];
+      logger.info(
+        `sendPasswordRecoverTemplate returned with status: ${response.statusCode}`
+      );
+    } catch (error) {
+      logger.error(error, {
+        reason: 'EXCEPTION: sendPasswordRecoverTemplate() ',
+      });
+      throw new Error(error);
+    }
+  }
+
+  public async loginDirectlyTemplate(user: UsersAttributes, token: string) {
+    try {
+      const message: MailDataRequired = {
+        from: this.adminEmail,
+        to: user.email,
+        personalizations: [
+          {
+            to: [{ email: user.email }],
+            subject: 'Login directly with email',
+            dynamicTemplateData: {
+              link: `${env.frontBaseUrl}/auth/user/login-directly/validate/${token}`,
+            },
+          },
+        ],
+        templateId: env.sendGridLoginTemplateId,
+      };
+      const response = (await this.sgMail.send(message))[0];
+      logger.info(
+        `loginDirectlyTemplate returned with status: ${response.statusCode}`
+      );
+    } catch (error) {
+      logger.error(error, {
+        reason: 'EXCEPTION: loginDirectlyTemplate() ',
+      });
+      throw new Error(error);
     }
   }
 }

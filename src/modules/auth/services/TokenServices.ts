@@ -12,6 +12,7 @@ import {
 import UserModel from '../../../common/models/UserModel';
 import sendGridMail from '../../../common/axios/sendGridMail';
 import {
+  TimeZone,
   UserIncludeLoginAttempts,
   UsersAttributes,
 } from '../../../common/types/common';
@@ -158,24 +159,27 @@ class TokenServices {
       recent_login_time: null,
     });
 
-    await ClientModel.create({
-      user_id: newUser.id,
-      first_name: firstName,
-      last_name: lastName,
-      gender: '',
-      phone_number: '',
-      dob: null,
-      address_country: '',
-      address_province: null,
-      address_district: null,
-      address_ward: null,
-      address_detail: '',
-      timezone: '',
-      stripe_customer_id: '',
-    });
-
-    const name = email.split('@')[0];
-    await sendGridMail.sendSignUpEmail(email, name);
+    await Promise.all([
+      ClientModel.create({
+        user_id: newUser.id,
+        first_name: firstName,
+        last_name: lastName,
+        gender: '',
+        phone_number: '',
+        dob: null,
+        address_country: '',
+        address_province: null,
+        address_district: null,
+        address_ward: null,
+        address_detail: '',
+        timezone: TimeZone.ASIA_HCM,
+        stripe_customer_id: '',
+      }),
+      sendGridMail.sendSignUpTemplate(
+        newUser,
+        sign({ email: newUser.email }, env.jwtSecret)
+      ),
+    ]);
   }
 
   protected async signUpAdminService(email: string, role: string) {
