@@ -1,14 +1,25 @@
 import { Model, DataTypes } from 'sequelize';
 import { CarAttributes, CarCreation } from '../types/common';
 import sequelize from '../../config/sequelize';
+import CarAppearanceModel from './CarAppearanceModel';
 
 class CarModel extends Model<CarAttributes, CarCreation> {
   id: number;
-  brand_id: number;
+  brandId: number;
   name: string;
-  price: number;
-  discount_percent: number;
-  description: string;
+  price: string;
+  discountPercent: number;
+  design: string;
+  engine: string;
+  gear: string;
+  seats: number;
+  capacity: string;
+  yearOfManufacture: number;
+  introReview: string;
+  exteriorReview: string;
+  interiorReview: string;
+  amenityReview: string;
+  safetyReview: string;
 }
 
 CarModel.init(
@@ -19,21 +30,59 @@ CarModel.init(
       primaryKey: true,
       allowNull: false,
     },
-    brand_id: {
+    brandId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'brand_id',
     },
     name: {
       type: DataTypes.STRING(255),
     },
     price: {
-      type: DataTypes.DECIMAL(10, 0),
+      type: DataTypes.STRING(255),
     },
-    discount_percent: {
+    discountPercent: {
       type: DataTypes.INTEGER,
+      field: 'discount_percent',
     },
-    description: {
+    design: {
       type: DataTypes.TEXT,
+    },
+    engine: {
+      type: DataTypes.TEXT,
+    },
+    gear: {
+      type: DataTypes.STRING(255),
+    },
+    seats: {
+      type: DataTypes.TEXT,
+    },
+    capacity: {
+      type: DataTypes.STRING(255),
+    },
+    yearOfManufacture: {
+      type: DataTypes.TEXT,
+      field: 'year_or_manufacture',
+    },
+    introReview: {
+      type: DataTypes.TEXT,
+      field: 'intro_review',
+    },
+    exteriorReview: {
+      type: DataTypes.TEXT,
+      field: 'exterior_review',
+    },
+    interiorReview: {
+      type: DataTypes.TEXT,
+      field: 'interior_review',
+    },
+    amenityReview: {
+      type: DataTypes.TEXT,
+      field: 'amenity_review',
+    },
+    safetyReview: {
+      type: DataTypes.TEXT,
+      field: 'safety_review',
     },
   },
   {
@@ -42,5 +91,10 @@ CarModel.init(
     sequelize,
   }
 );
+
+CarModel.hasOne(CarAppearanceModel, {
+  as: 'carAppearance',
+  foreignKey: 'car_id',
+});
 
 export default CarModel;
