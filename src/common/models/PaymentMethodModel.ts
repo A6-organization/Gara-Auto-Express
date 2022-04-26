@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize/types';
+import { Model, DataTypes } from 'sequelize';
 import {
   PaymentMethodAttributes,
   PaymentMethodCreation,

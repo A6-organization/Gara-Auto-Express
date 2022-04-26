@@ -4,7 +4,6 @@ import ExpressApplication from './app';
 import routes from './routers';
 import env, { Environment } from './config/env';
 
-//TODO:
 const middleWares = [cors()];
 
 const app = new ExpressApplication({

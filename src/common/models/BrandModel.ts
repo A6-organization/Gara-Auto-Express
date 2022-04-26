@@ -1,10 +1,10 @@
-import { DataTypes, Model } from 'sequelize/types';
+import { Model, DataTypes } from 'sequelize';
 import { BrandAttributes, BrandCreation } from '../types/common';
 import sequelize from '../../config/sequelize';
 
 class BrandModel extends Model<BrandAttributes | BrandCreation> {
-  id: number;
-  name: string;
+  declare id: number;
+  declare name: string;
 }
 
 BrandModel.init(

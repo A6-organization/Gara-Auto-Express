@@ -3,10 +3,10 @@ import { LoginTokenAttributes, LoginTokenCreation } from '../types/common';
 import sequelize from '../../config/sequelize';
 
 class LoginTokenModel extends Model<LoginTokenAttributes | LoginTokenCreation> {
-  id: number;
-  token: string;
-  user_id: number;
-  created_at: Date;
+  declare id: number;
+  declare token: string;
+  declare user_id: number;
+  declare created_at: Date;
 }
 
 LoginTokenModel.init(

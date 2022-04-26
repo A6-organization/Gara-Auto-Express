@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize/types';
+import { Model, DataTypes } from 'sequelize';
 import {
   CarAppearanceAttributes,
   CarAppearanceCreation,
@@ -8,10 +8,10 @@ import sequelize from '../../config/sequelize';
 class CarAppearanceModel extends Model<
   CarAppearanceAttributes | CarAppearanceCreation
 > {
-  id: number;
-  car_id: number;
-  img: string;
-  color: string;
+  declare id: number;
+  declare car_id: number;
+  declare img: string;
+  declare color: string;
 }
 
 CarAppearanceModel.init(

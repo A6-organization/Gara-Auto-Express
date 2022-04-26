@@ -1,22 +1,22 @@
-import { Model, DataTypes } from 'sequelize/types';
+import { Model, DataTypes } from 'sequelize';
 import { ClientAttributes, ClientCreation } from '../types/common';
 import sequelize from '../../config/sequelize';
 
 class ClientModel extends Model<ClientAttributes, ClientCreation> {
-  id: number;
-  user_id: number;
-  first_name: string;
-  last_name: string;
-  gender: string;
-  phone_number: string;
-  dob: Date;
-  address_country: string;
-  address_province: number;
-  address_district: number;
-  address_ward: number;
-  address_detail: string;
-  timezone: string;
-  stripe_customer_id: string;
+  declare id: number;
+  declare user_id: number;
+  declare first_name: string;
+  declare last_name: string;
+  declare gender: string;
+  declare phone_number: string;
+  declare dob: Date;
+  declare address_country: string;
+  declare address_province: number;
+  declare address_district: number;
+  declare address_ward: number;
+  declare address_detail: string;
+  declare timezone: string;
+  declare stripe_customer_id: string;
 }
 
 ClientModel.init(

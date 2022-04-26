@@ -12,6 +12,7 @@ import {
 import UserModel from '../../../common/models/UserModel';
 import sendGridMail from '../../../common/axios/sendGridMail';
 import {
+  TimeZone,
   UserIncludeLoginAttempts,
   UsersAttributes,
 } from '../../../common/types/common';
@@ -19,6 +20,8 @@ import dayjs from 'dayjs';
 import LoginAttemptsRepo from '../../../common/repositories/LoginAttempsRepo';
 import { compareDate1GreaterDate2 } from '../../../common/helpers/dateTime';
 import GoogleRecaptchaService from '../../../common/services/GoogleRecaptchaService';
+import ClientModel from '../../../common/models/ClientModel';
+import generator from 'generate-password';
 
 class TokenServices {
   protected generateToken = async (email: string, type: TokenType) => {
@@ -112,6 +115,8 @@ class TokenServices {
   };
 
   protected async signUpAccountService(
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
     roles: string,
@@ -145,7 +150,7 @@ class TokenServices {
 
     password = await generateSaltPassword(password);
 
-    await UserModel.create({
+    const newUser = await UserModel.create({
       status: UserStatus.INITIAL,
       created_at: new Date(),
       email,
@@ -154,8 +159,55 @@ class TokenServices {
       recent_login_time: null,
     });
 
-    const name = email.split('@')[0];
-    await sendGridMail.sendSignUpEmail(email, name);
+    await Promise.all([
+      ClientModel.create({
+        user_id: newUser.id,
+        first_name: firstName,
+        last_name: lastName,
+        gender: '',
+        phone_number: '',
+        dob: null,
+        address_country: '',
+        address_province: null,
+        address_district: null,
+        address_ward: null,
+        address_detail: '',
+        timezone: TimeZone.ASIA_HCM,
+        stripe_customer_id: '',
+      }),
+      sendGridMail.sendSignUpTemplate(
+        newUser,
+        sign({ email: newUser.email }, env.jwtSecret)
+      ),
+    ]);
+  }
+
+  protected async signUpAdminService(email: string, role: string) {
+    const userExist = await UserRepo.findUserByEmail(email);
+    if (userExist) {
+      throw new Error(messages.userMessage.EmailExist);
+    }
+
+    // Password have 8 character include number, uppercase, lowercase.Example password: 90wDDBfG
+    const password = generator.generate({
+      length: 8,
+      numbers: true,
+    });
+
+    const hashPassword = await generateSaltPassword(password);
+
+    await UserModel.create({
+      status: UserStatus.INITIAL,
+      created_at: new Date(),
+      email,
+      password: hashPassword,
+      roles: role.toUpperCase(),
+      recent_login_time: null,
+    });
+
+    return { email, password, role };
+
+    //sendGrid
   }
 
   protected loginService = async (email: string, password: string) => {

@@ -5,13 +5,13 @@ import { UsersAttributes, UsersCreation } from '../types/common';
 import LoginAttemptsModel from './LoginAttemptsModel';
 
 class UserModel extends Model<UsersAttributes | UsersCreation> {
-  id: number;
-  password: string;
-  roles: UserRoles | string;
-  status: UserStatus | string;
-  email: string;
-  created_at: Date;
-  recent_login_time: Date;
+  declare id: number;
+  declare password: string;
+  declare roles: UserRoles | string;
+  declare status: UserStatus | string;
+  declare email: string;
+  declare created_at: Date;
+  declare recent_login_time: Date;
 }
 
 UserModel.init(

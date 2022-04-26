@@ -9,10 +9,10 @@ import {
 class EmailReminderModel extends Model<
   EmailReminderAttributes | EmailReminderCreation
 > {
-  id: number;
-  user_id: number;
-  email_status: EmailStatus;
-  last_send_time: Date;
+  declare id: number;
+  declare user_id: number;
+  declare email_status: EmailStatus;
+  declare last_send_time: Date;
 }
 
 EmailReminderModel.init(

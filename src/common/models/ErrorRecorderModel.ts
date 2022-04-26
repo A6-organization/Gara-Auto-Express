@@ -8,10 +8,10 @@ import sequelize from '../../config/sequelize';
 class ErrorRecorderModel extends Model<
   ErrorRecorderAttributes | ErrorRecorderCreation
 > {
-  id: number;
-  destination: string;
-  reason: string;
-  created_at: Date;
+  declare id: number;
+  declare destination: string;
+  declare reason: string;
+  declare created_at: Date;
 }
 
 ErrorRecorderModel.init(
