@@ -9,10 +9,12 @@ import BadRequestError from '../../../common/errors/types/BadRequestError';
 import UnauthorizedError from '../../../common/errors/types/UnaithorizedError';
 import { BLOCK_IPS } from '../../../common/constants';
 import ErrorRecorderRepo from '../../../common/repositories/ErrorRecorderRepo';
+import sendGridMail from '../../../common/axios/sendGridMail';
 class AuthController extends TokenServices {
   apiCheck = async (_req: Request, res: Response) => {
     try {
       const result = await UserRepo.findAllUser();
+      await sendGridMail.sendGridSignUpTemplate(result[1]);
       res.json(result);
     } catch (error) {
       logger.error(error, { reason: 'EXCEPTION at apiCheck()' });

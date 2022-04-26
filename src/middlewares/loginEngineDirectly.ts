@@ -5,7 +5,7 @@ export default (req: Request, _res: Response, next: NextFunction): void => {
   if (req.headers && req.headers['web-engine-directly']) {
     const loginDirectlyValue = req.headers['web-engine-directly'];
     if (loginDirectlyValue !== 'true') {
-      return next(new UnauthorizedError());
+            return next(new UnauthorizedError());
     }
     return next();
   }

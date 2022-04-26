@@ -69,19 +69,35 @@ export type BrandCreation = Omit<BrandAttributes, 'id'>;
 export interface CarAppearanceAttributes {
   id: number;
   car_id: number;
-  img: string;
-  color: string;
+  imgs: string;
+  introImgs: string;
+  exteriorReviewImgs: string;
+  interiorReviewImgs: string;
+  newImgs: string;
+  newIntroImgs: string;
+  newExteriorReviewImgs: string;
+  newInteriorReviewImgs: string;
 }
 
 export type CarAppearanceCreation = Omit<CarAppearanceAttributes, 'id'>;
 
 export interface CarAttributes {
   id: number;
-  brand_id: number;
+  brandId: number;
   name: string;
-  price: number;
-  discount_percent: number;
-  description: string;
+  price: string;
+  discountPercent: number;
+  design: string;
+  engine: string;
+  gear: string;
+  seats: number;
+  capacity: string;
+  yearOfManufacture: number;
+  introReview: string;
+  exteriorReview: string;
+  interiorReview: string;
+  amenityReview: string;
+  safetyReview: string;
 }
 
 export type CarCreation = Omit<CarAttributes, 'id'>;
@@ -149,7 +165,6 @@ export type ExitedField<E> = {
 export type AdditionalField<A> = {
   [Property in keyof A]: A[Property];
 };
-
 export type JoinedQueryType<E, A> = ExitedField<Partial<E>> &
   AdditionalField<A>;
 

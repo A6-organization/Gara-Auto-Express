@@ -3,6 +3,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import env from '../../config/env';
 import { logger } from '../helpers/logger';
+import { UsersAttributes } from '../types/common';
 
 class SendGridMail {
   protected adminEmail: string;
@@ -17,6 +18,28 @@ class SendGridMail {
     this.apiUrl = env.sendGridApiUrl;
     this.apiKey = env.sendGridApiKey;
     this.sgMail.setApiKey(env.sendGridApiKey);
+  }
+  async sendGridSignUpTemplate(user: UsersAttributes) {
+    try {
+      const message: MailDataRequired = {
+        from: this.adminEmail,
+        to: 'hung0968374@gmail.com',
+        personalizations: [
+          {
+            to: [{ email: `hung0968374@gmail.com` }],
+            subject: 'Welcome to the garage auto!',
+            dynamicTemplateData: {},
+          },
+        ],
+        templateId: 'd-3ae4f231c9b54a1697bfa5727cf39b83',
+      };
+      message.personalizations[0].dynamicTemplateData.email = `hung0968374@gmail.com`;
+      message.personalizations[0].dynamicTemplateData.link = `localhost:3000/verify`;
+      const response = (await this.sgMail.send(message))[0];
+      console.log('response', response);
+    } catch (error) {
+      logger.error(error);
+    }
   }
 
   async sendGridSendTemplatedEmail(
