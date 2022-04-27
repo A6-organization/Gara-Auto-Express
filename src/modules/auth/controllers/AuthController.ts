@@ -50,6 +50,25 @@ class AuthController extends TokenServices {
     }
   };
 
+  signUpAccountSuccess = async (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    try {
+      await this.signUpAccountSuccessService(token);
+      res.json({
+        success: true,
+        message: 'Your account has been activated',
+      });
+    } catch (error) {
+      logger.error(error, { reason: 'EXCEPTION at signUpAccountSuccess()' });
+      await ErrorRecorderRepo.logger('signUpAccountSuccess()', String(error));
+      if (error.message) {
+        throw new BadRequestError(error.message);
+      }
+      throw new InternalServerError(messages.somethingWentWrongMessage);
+    }
+  };
+
   generateAdminAccount = async (req: Request, res: Response) => {
     const { email, role } = req.body;
     try {

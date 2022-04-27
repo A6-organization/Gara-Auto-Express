@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jsonwebtoken';
+
 export enum UserStatus {
   INITIAL = 'INITIAL',
   ACTIVE = 'ACTIVE',
@@ -27,4 +29,7 @@ export type SignInBody = Omit<SignUpBody, 'roles'>;
 export enum TokenType {
   ACCESS = 'Access',
   REFRESH = 'Refresh',
+}
+export interface JWTPayloadType extends JwtPayload {
+  email?: string;
 }
