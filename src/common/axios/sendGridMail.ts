@@ -152,7 +152,7 @@ class SendGridMail {
             subject: 'Welcome to the Gara-Auto Dream!',
             dynamicTemplateData: {
               email: user.email,
-              link: `${env.frontBaseUrl}/auth/user/sign-up/validate/${token}`,
+              link: `${env.frontBaseUrl}auth/user/sign-up/validate/${token}`,
             },
           },
         ],
@@ -184,7 +184,7 @@ class SendGridMail {
             subject: 'Recover password with GARA-AUTO!',
             dynamicTemplateData: {
               email: user.email,
-              link: `${env.frontBaseUrl}/auth/user/password-recover/validate/${token}`,
+              link: `${env.frontBaseUrl}auth/user/password-recover/validate/${token}`,
             },
           },
         ],

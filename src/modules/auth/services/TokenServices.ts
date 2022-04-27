@@ -1,9 +1,14 @@
 import LoginTokenRepo from '../../../common/repositories/LoginTokenRepo';
 import env from '../../../config/env';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { logger } from '../../../common/helpers/logger';
 import messages from '../../../common/messages';
-import { TokenType, UserRoles, UserStatus } from '../types/auth';
+import {
+  JWTPayloadType,
+  TokenType,
+  UserRoles,
+  UserStatus,
+} from '../types/auth';
 import UserRepo from '../../../common/repositories/UserRepo';
 import {
   generateSaltPassword,
@@ -159,6 +164,9 @@ class TokenServices {
       recent_login_time: null,
     });
 
+    const token = sign({ email: newUser.email }, env.jwtSecret);
+    console.log('token', token);
+
     await Promise.all([
       ClientModel.create({
         user_id: newUser.id,
@@ -175,11 +183,23 @@ class TokenServices {
         timezone: TimeZone.ASIA_HCM,
         stripe_customer_id: '',
       }),
-      sendGridMail.sendSignUpTemplate(
-        newUser,
-        sign({ email: newUser.email }, env.jwtSecret)
-      ),
+
+      sendGridMail.sendSignUpTemplate(newUser, token),
     ]);
+  }
+
+  protected async signUpAccountSuccessService(token: string) {
+    const result: JWTPayloadType = verify(token, env.jwtSecret);
+    const { email } = result;
+
+    await UserModel.update(
+      { status: UserStatus.ACTIVE },
+      {
+        where: {
+          email,
+        },
+      }
+    );
   }
 
   protected async signUpAdminService(email: string, role: string) {

@@ -20,6 +20,11 @@ router.post(
 );
 
 router.post(
+  '/user/sign-up/:token',
+  wrapper(AuthController.signUpAccountSuccess)
+);
+
+router.post(
   '/admin/sign-up',
   [validateExpiryToken, authentication, validateAdmin],
   wrapper(AuthController.generateAdminAccount)
