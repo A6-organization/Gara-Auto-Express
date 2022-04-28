@@ -19,6 +19,10 @@ BrandModel.init(
       type: DataTypes.STRING(20),
       allowNull: false,
     },
+    descriptions: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
   },
   {
     tableName: 'brand',

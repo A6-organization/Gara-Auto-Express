@@ -6,12 +6,14 @@ import AdminController from '../controller/AdminController';
 
 const router = express.Router();
 
+router.get('/oto/get-all', wrapper(AdminController.getAllCars));
+router.put('/brand/update-brand', wrapper(AdminController.updateBrand));
+
 router.post(
-  '/oto/create-oto',
+  '/car/create-car',
   [validateExpiryToken, validateAdmin],
   wrapper(AdminController.createNewOto)
 );
-
-router.get('/oto/get-all', wrapper(AdminController.getAllCars));
+router.get('/car/get-all', wrapper(AdminController.getAllCars));
 
 export default router;

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import authRoutes from './modules/auth/routers/auth';
-import adminRoutes from './modules/admin/routes/admin';
+import adminRoute from './modules/admin/routes/admin';
+import clientRoute from './modules/client/routes/client';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.get('/', (_req: Request, res: Response) => {
 });
 
 router.use('/auth', authRoutes);
-router.use('/admin', adminRoutes);
+router.use('/admin', adminRoute);
+router.use('/client', clientRoute);
 
 export default router;
