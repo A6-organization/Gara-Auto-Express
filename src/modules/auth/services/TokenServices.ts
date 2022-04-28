@@ -163,9 +163,10 @@ class TokenServices {
       roles,
       recent_login_time: null,
     });
+    // console.log('newUser', newUser);
 
     const token = sign({ email: newUser.email }, env.jwtSecret);
-    console.log('token', token);
+    // console.log('token', token);
 
     await Promise.all([
       ClientModel.create({
@@ -314,6 +315,47 @@ class TokenServices {
     const refreshToken = await this.handleRefreshToken(user);
 
     return { accessToken, refreshToken };
+  };
+
+  protected passwordRecoverService = async (email: string) => {
+    const userExist = await UserRepo.findUserDetailsByEmail(email);
+
+    if (!userExist) {
+      throw new Error(messages.authMessage.EmailNotExist);
+    }
+
+    if (userExist.status !== UserStatus.ACTIVE) {
+      throw new Error(messages.authMessage.AccountHaventActivated);
+    }
+
+    const token = sign({ email }, env.jwtSecret);
+    // console.log('token', token);
+
+    const user: UsersAttributes = {
+      id: userExist.id,
+      password: userExist.password,
+      roles: userExist.roles,
+      status: userExist.status,
+      email: userExist.email,
+      created_at: userExist.created_at,
+      recent_login_time: userExist.recent_login_time,
+    };
+
+    sendGridMail.sendPasswordRecoverTemplate(user, token);
+  };
+
+  protected newPasswordService = async (token: string, newPassword: string) => {
+    const { email } = verify(token, env.jwtSecret);
+    newPassword = await generateSaltPassword(newPassword);
+
+    await UserModel.update(
+      { password: newPassword },
+      {
+        where: {
+          email,
+        },
+      }
+    );
   };
 
   protected regenerateAccessTokenService = async (

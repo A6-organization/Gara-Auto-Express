@@ -43,6 +43,18 @@ router.post(
 );
 
 router.post(
+  '/user/password-recover',
+  [validate(authRequest.passwordRecover)],
+  wrapper(AuthController.passwordRecover)
+);
+
+router.post(
+  '/user/new-password/:token',
+  [validate(authRequest.newPassword)],
+  wrapper(AuthController.newPassword)
+);
+
+router.post(
   '/gen-new-token',
   [validateExpiryToken, authenticateRegenerate],
   wrapper(AuthController.regenerateAccessToken)

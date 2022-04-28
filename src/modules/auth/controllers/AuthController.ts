@@ -139,6 +139,44 @@ class AuthController extends TokenServices {
     }
   };
 
+  passwordRecover = async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    try {
+      await this.passwordRecoverService(email);
+      res.send(
+        'Message has been sent to email, check your mail for verification'
+      );
+    } catch (error) {
+      logger.error(error, { reason: 'EXCEPTION at passwordRecover()' });
+      await ErrorRecorderRepo.logger('passwordRecover()', String(error));
+      if (error.message) {
+        throw new BadRequestError(error.message);
+      }
+      throw new InternalServerError(messages.somethingWentWrongMessage);
+    }
+  };
+
+  newPassword = async (req: Request, res: Response) => {
+    const { password } = req.body;
+    const { token } = req.params;
+
+    try {
+      await this.newPasswordService(token, password);
+      res.json({
+        success: true,
+        message: 'You have recover account successfully, you can login now',
+      });
+    } catch (error) {
+      logger.error(error, { reason: 'EXCEPTION at newPassword()' });
+      await ErrorRecorderRepo.logger('newPassword()', String(error));
+      if (error.message) {
+        throw new BadRequestError(error.message);
+      }
+      throw new InternalServerError(messages.somethingWentWrongMessage);
+    }
+  };
+
   regenerateAccessToken = async (req: Request, res: Response) => {
     try {
       const user = req.user;
