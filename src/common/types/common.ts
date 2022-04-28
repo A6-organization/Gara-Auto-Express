@@ -62,9 +62,19 @@ export type ErrorRecorderCreation = Omit<ErrorRecorderAttributes, 'id'>;
 export interface BrandAttributes {
   id: number;
   name: string;
+  descriptions: string;
 }
 
 export type BrandCreation = Omit<BrandAttributes, 'id'>;
+export type BrandModifying = Omit<BrandCreation, 'name'>;
+export interface UserCarRatingAttributes {
+  id: number;
+  carId: number;
+  userId: number;
+  ratingPoint: string;
+}
+
+export type UserCarRatingCreation = Omit<UserCarRatingAttributes, 'id'>;
 
 export interface CarAppearanceAttributes {
   id: number;

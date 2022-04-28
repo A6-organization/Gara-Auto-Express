@@ -2,7 +2,7 @@ import admin from 'firebase-admin';
 import uuid from 'uuid-v4';
 import { stringifyArray } from '../../../common/helpers/string';
 
-import firebaseServiceKeys from '../../../firebaseServiceKeys.json';
+import firebaseServiceKeys from '../../../firebaseServiceKeys';
 
 /// get node-fetch
 const importDynamic = new Function('modulePath', 'return import(modulePath)');
@@ -16,11 +16,11 @@ admin.initializeApp({
   credential: admin.credential.cert(
     firebaseServiceKeys as admin.ServiceAccount
   ),
-  storageBucket: 'oto-a6dev.appspot.com',
+  storageBucket: 'oto-a6dev-cfa9c.appspot.com',
 });
 const bucket = admin.storage().bucket();
 
-class UploadImgsFromUrlService {
+class UploadImgsFromUrlsService {
   private fetchFile(link: string) {
     return new Promise((resolve) => {
       resolve(fetch(link));
@@ -33,7 +33,10 @@ class UploadImgsFromUrlService {
       const responseFromFetchFiles = await Promise.all(fetchFilePromises);
       /* eslint-disable  @typescript-eslint/no-explicit-any */
       const newUrls = responseFromFetchFiles.map((response: any) => {
-        const newUrl = response.url.replace('https://img.tinbanxe.vn/', '');
+        const newUrl = response.url
+          .replace('https://img.tinbanxe.vn/', '')
+          .replace('https://tinbanxe.vn/', '');
+
         // const file = bucket.file('path/to/image.jpg');
         const file = bucket.file(newUrl);
 
@@ -54,4 +57,4 @@ class UploadImgsFromUrlService {
   }
 }
 
-export default UploadImgsFromUrlService;
+export default UploadImgsFromUrlsService;

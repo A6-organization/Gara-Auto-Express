@@ -2,10 +2,18 @@ import defaultBrands from './brands.json';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
+export const converIntToFloat = (num: number, decPlaces: number): number => {
+  return num.toFixed(decPlaces) as any;
+};
+
 export const getRandomDiscountPercent = () => {
   const percentages = [0, 2, 5, 7, 10];
   const randIdx = Math.floor(Math.random() * percentages.length);
   return percentages[randIdx];
+};
+
+export const getRandomBetween = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
 export const mapBrandToBrandId = (inputBrand: string) => {
