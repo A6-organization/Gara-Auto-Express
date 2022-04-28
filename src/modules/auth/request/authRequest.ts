@@ -17,4 +17,14 @@ export default {
       roles: Joi.string().optional(),
     }),
   },
+  passwordRecover: {
+    body: Joi.object({
+      email: Joi.string().required(),
+    }),
+  },
+  newPassword: {
+    body: Joi.object({
+      password: Joi.string().required(),
+    }),
+  },
 };
