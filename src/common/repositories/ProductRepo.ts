@@ -3,10 +3,11 @@ import CarModel from '../models/CarModel';
 import { CarCreation } from '../types/common';
 
 class ProductRepository {
-  async createNewOto(datas: CarCreation) {
-    return CarModel.create(datas);
+  async createNewOto(attributes: CarCreation) {
+    return CarModel.create(attributes);
   }
-  getAllOtos = async () => {
+
+  getAllCars = async () => {
     return CarModel.findAll({
       include: {
         model: CarAppearanceModel,

@@ -1,5 +1,7 @@
 import defaultBrands from './brands.json';
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 export const getRandomDiscountPercent = () => {
   const percentages = [0, 2, 5, 7, 10];
   const randIdx = Math.floor(Math.random() * percentages.length);

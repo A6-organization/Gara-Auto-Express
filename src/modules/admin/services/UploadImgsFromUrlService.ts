@@ -6,7 +6,7 @@ import firebaseServiceKeys from '../../../firebaseServiceKeys.json';
 
 /// get node-fetch
 const importDynamic = new Function('modulePath', 'return import(modulePath)');
-const fetch = async (...args: any[]) => {
+const fetch = async (...args: unknown[]) => {
   const module = await importDynamic('node-fetch');
   return module.default(...args);
 };
@@ -26,14 +26,16 @@ class UploadImgsFromUrlService {
       resolve(fetch(link));
     });
   }
+
   async uploadImgsToFirebase(urls: Array<string> | string) {
     if (typeof urls === 'object') {
       const fetchFilePromises = urls.map((url) => this.fetchFile(url));
       const responseFromFetchFiles = await Promise.all(fetchFilePromises);
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
       const newUrls = responseFromFetchFiles.map((response: any) => {
-        const newurl = response.url.replace('https://img.tinbanxe.vn/', '');
+        const newUrl = response.url.replace('https://img.tinbanxe.vn/', '');
         // const file = bucket.file('path/to/image.jpg');
-        const file = bucket.file(newurl);
+        const file = bucket.file(newUrl);
 
         const contentType = response.headers.get('content-type');
         const writeStream = file.createWriteStream({
@@ -45,7 +47,7 @@ class UploadImgsFromUrlService {
           },
         });
         response.body.pipe(writeStream);
-        return newurl;
+        return newUrl;
       });
       return stringifyArray(newUrls);
     }

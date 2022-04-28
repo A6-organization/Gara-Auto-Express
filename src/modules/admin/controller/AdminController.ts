@@ -18,12 +18,12 @@ class ProductController extends UploadImgFromUrlService {
     req: Request<unknown, unknown, Array<CreateNewOtoBody>>,
     res: Response
   ) => {
-    const newOtos = req.body;
+    const newCreationCars = req.body;
     try {
-      const createOtoPromises = newOtos.map(async (oto) => {
+      const createOtoPromises = newCreationCars.map(async (oto) => {
         const otoBaseInfos = oto.baseInfo;
         const productImgs = oto.productImgs;
-
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         const newOtoImgs = {} as any;
         const newOto = { ...otoBaseInfos, ...otoBaseInfos.description };
         assignPropToObj(
@@ -90,17 +90,17 @@ class ProductController extends UploadImgFromUrlService {
       await Promise.all(createOtoPromises);
       res.json({ status: 'success' });
     } catch (error) {
-      logger.error(error, { reason: 'EXCEPTION at apiCheck()' });
+      logger.error(error, { reason: 'EXCEPTION at createNewOto()' });
       throw new InternalServerError();
     }
   };
 
-  getAllOtos = async (req: Request, res: Response) => {
+  getAllCars = async (_req: Request, res: Response) => {
     try {
-      const datas = await ProductRepo.getAllOtos();
-      res.json({ status: 'success', datas });
+      const result = await ProductRepo.getAllCars();
+      res.json({ status: 'success', result });
     } catch (error) {
-      logger.error(error, { reason: 'EXCEPTION at apiCheck()' });
+      logger.error(error, { reason: 'EXCEPTION at getAllCars()' });
       throw new InternalServerError();
     }
   };
