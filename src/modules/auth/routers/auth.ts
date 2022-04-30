@@ -15,7 +15,7 @@ router.get('/api-check', wrapper(AuthController.apiCheck));
 
 router.post(
   '/user/sign-up',
-  validate(authRequest.signUpBody),
+  [validate(authRequest.signUpBody)],
   wrapper(AuthController.signUpAccount)
 );
 
